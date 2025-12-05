@@ -188,9 +188,9 @@ const Home = () => {
                     loop={true}
                     cursor
                     cursorStyle='|'
-                    typeSpeed={70}
+                    typeSpeed={50}
                     deleteSpeed={50}
-                    delaySpeed={1000}
+                    delaySpeed={900}
                   />
                 </motion.div>
 

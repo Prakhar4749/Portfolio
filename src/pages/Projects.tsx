@@ -43,17 +43,41 @@ const Projects = () => {
     fetchRepositories();
   }, []);
 
-  const fetchRepositories = async () => {
-    try {
-      const response = await fetch('https://api.github.com/users/Prakhar4749/repos?sort=updated&per_page=20');
-      const data = await response.json();
-      setRepos(data);
-    } catch (error) {
-      console.error('Error fetching repositories:', error);
-    } finally {
-      setLoading(false);
+  const fetchRepositories = async (): Promise<void> => {
+  try {
+    setLoading(true);
+
+    const response = await fetch(
+      "https://api.github.com/users/Prakhar4749/repos?sort=updated&per_page=20",
+      {
+        headers: {
+          Accept: "application/vnd.github+json",
+          "User-Agent": "prakhar-portfolio", // any string is fine
+        },
+      }
+    );
+
+    if (!response.ok) {
+      console.error("GitHub API error:", response.status, response.statusText);
+      return;
     }
-  };
+
+    const data = (await response.json()) as Repository[];
+
+    // Optional: sort again just to be sure
+    const sorted = [...data].sort(
+      (a, b) =>
+        new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+    );
+
+    setRepos(sorted);
+  } catch (error) {
+    console.error("Error fetching repositories:", error);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const getProjectDetails = (repo: Repository) => {
     const featured = featuredProjects.find(p => 
