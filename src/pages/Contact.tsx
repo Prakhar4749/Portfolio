@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { resumeData } from "@/data/resume";
-import { Mail, Phone, Github, Linkedin, MapPin, Send, ExternalLink, Braces, Instagram } from "lucide-react";
+import { Mail, Phone, Github, Linkedin, MapPin, Send, Globe, Braces } from "lucide-react";
 
 interface FormData {
   name: string;
@@ -32,14 +32,14 @@ const socialLinks = [
   {
     name: "LeetCode",
     icon: Braces,
-    url: `https://leetcode.com/${resumeData.personalInfo.leetcode}`,
-    description: "View my coding solutions"
+    url: `https://leetcode.com/u/${resumeData.personalInfo.leetcode}`,
+    description: "View my coding solutions (150+ problems)"
   },
   {
-    name: "Instagram",
-    icon: Instagram,
-    url: `https://instagram.com/${resumeData.personalInfo.instagram}`,
-    description: "Go behind the scenes of my professional journey"
+    name: "Portfolio",
+    icon: Globe,
+    url: `https://${resumeData.personalInfo.website}`,
+    description: "Visit my personal website"
   }
 ];
 
@@ -114,7 +114,6 @@ const Contact = () => {
       // Simulate form submission
       await new Promise(resolve => setTimeout(resolve, 2000));
 
-      // Here you would typically send the form data to your backend
       console.log("Form submitted:", formData);
 
       toast({
@@ -236,7 +235,7 @@ const Contact = () => {
                   >
                     {isSubmitting ? (
                       <>
-                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary-foreground mr-2" />
                         Sending...
                       </>
                     ) : (
@@ -297,7 +296,7 @@ const Contact = () => {
                     <MapPin className="w-5 h-5 text-muted-foreground" />
                     <div>
                       <p className="font-medium">Location</p>
-                      <p className="text-sm text-muted-foreground">India</p>
+                      <p className="text-sm text-muted-foreground">Bhopal, M.P., India</p>
                     </div>
                   </div>
                 </CardContent>
@@ -318,7 +317,7 @@ const Contact = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  {socialLinks.map((link, index) => (
+                  {socialLinks.map((link) => (
                     <motion.a
                       key={link.name}
                       href={link.url}
@@ -341,25 +340,6 @@ const Contact = () => {
               </Card>
             </motion.div>
           </div>
-
-          {/* Quick Response - Now below the form */}
-          {/* <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-            className="lg:col-span-2 order-3 lg:order-3"
-          >
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Quick Response</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  I typically respond to messages within 24 hours. For urgent matters, feel free to reach out via phone or LinkedIn.
-                </p>
-              </CardContent>
-            </Card>
-          </motion.div> */}
         </div>
       </div>
     </div>

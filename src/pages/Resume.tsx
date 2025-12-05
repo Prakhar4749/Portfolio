@@ -1,21 +1,20 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { resumeData } from "@/data/resume";
-import { Download, Mail, Phone, Github, Linkedin, MapPin, Calendar, Building, GraduationCap, Award, Code } from "lucide-react";
+import { Download, Mail, Phone, Github, Linkedin, MapPin, Calendar, Building, GraduationCap, Award, Code, Globe, Trophy } from "lucide-react";
 
 const Resume = () => {
-  // Download PDF from public folder (React/static hosting)
-const handleDownloadResume = () => {
-  const link = document.createElement('a');
-  link.href = '/Prakhar_Resume.pdf'; // Path to your PDF in public folder
-  link.download = 'Prakhar_Resume.pdf'; // Desired filename for download
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-};
+  const handleDownloadResume = () => {
+    const link = document.createElement('a');
+    link.href = '/prakhar_resume.pdf';
+    link.download = 'Prakhar_Sakhare_Resume.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <div className="min-h-screen py-20">
@@ -62,6 +61,10 @@ const handleDownloadResume = () => {
                     <span>{resumeData.personalInfo.phone}</span>
                   </div>
                   <div className="flex items-center gap-1">
+                    <Globe className="w-4 h-4" />
+                    <span>{resumeData.personalInfo.website}</span>
+                  </div>
+                  <div className="flex items-center gap-1">
                     <Github className="w-4 h-4" />
                     <span>{resumeData.personalInfo.github}</span>
                   </div>
@@ -71,6 +74,22 @@ const handleDownloadResume = () => {
                   </div>
                 </div>
               </div>
+
+              <Separator className="my-8" />
+
+              {/* Summary */}
+              <motion.section
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="mb-8"
+              >
+                <h2 className="text-2xl font-bold mb-4">Summary</h2>
+                <p className="text-muted-foreground leading-relaxed pl-4">
+                  {resumeData.hero.intro}
+                </p>
+              </motion.section>
 
               <Separator className="my-8" />
 
@@ -89,8 +108,12 @@ const handleDownloadResume = () => {
                 <div className="pl-7">
                   <h3 className="text-lg font-semibold">{resumeData.education.degree}</h3>
                   <div className="flex items-center gap-2 text-muted-foreground">
-                    <MapPin className="w-4 h-4" />
+                    <Building className="w-4 h-4" />
                     <span>{resumeData.education.institution}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <MapPin className="w-4 h-4" />
+                    <span>{resumeData.education.location}</span>
                   </div>
                   <div className="flex items-center gap-2 text-muted-foreground">
                     <Calendar className="w-4 h-4" />
@@ -131,14 +154,16 @@ const handleDownloadResume = () => {
                             <h3 className="text-lg font-semibold">{exp.position}</h3>
                             <p className="text-muted-foreground font-medium">
                               {exp.company}
-                              {exp.type && <span className="text-sm"> • {exp.type}</span>}
                             </p>
-                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                              <Calendar className="w-4 h-4" />
-                              <span>{exp.duration}</span>
-                              {exp.current && (
-                                <Badge variant="secondary" className="ml-2">Current</Badge>
-                              )}
+                            <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                              <div className="flex items-center gap-1">
+                                <MapPin className="w-4 h-4" />
+                                <span>{exp.location}</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <Calendar className="w-4 h-4" />
+                                <span>{exp.duration}</span>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -180,7 +205,14 @@ const handleDownloadResume = () => {
                       transition={{ duration: 0.5, delay: index * 0.1 }}
                       className="pl-7"
                     >
-                      <h3 className="text-lg font-semibold mb-2">{project.name}</h3>
+                      <div className="flex items-center gap-2 mb-2">
+                        <h3 className="text-lg font-semibold">{project.name}</h3>
+                        {project.status && (
+                          <Badge variant="secondary" className="text-xs">
+                            {project.status}
+                          </Badge>
+                        )}
+                      </div>
                       <p className="text-muted-foreground text-sm mb-3">{project.description}</p>
                       
                       <div className="flex flex-wrap gap-2 mb-2">
@@ -203,7 +235,7 @@ const handleDownloadResume = () => {
 
               <Separator className="my-8" />
 
-              {/* Skills */}
+              {/* Technical Skills */}
               <motion.section
                 initial={{ opacity: 0, x: -30 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -213,26 +245,28 @@ const handleDownloadResume = () => {
               >
                 <div className="flex items-center gap-2 mb-4">
                   <Code className="w-5 h-5 text-primary" />
-                  <h2 className="text-2xl font-bold">Technologies</h2>
+                  <h2 className="text-2xl font-bold">Technical Skills</h2>
                 </div>
                 <div className="pl-7 space-y-4">
                   <div>
+                    <h4 className="font-semibold mb-2">Primary Stack:</h4>
+                    <p className="text-muted-foreground text-sm">{resumeData.skills.primaryStack.join(", ")}</p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold mb-2">Secondary:</h4>
+                    <p className="text-muted-foreground text-sm">{resumeData.skills.secondary.join(", ")}</p>
+                  </div>
+                  <div>
                     <h4 className="font-semibold mb-2">Languages:</h4>
-                    <p className="text-muted-foreground">{resumeData.skills.languages.join(", ")}</p>
+                    <p className="text-muted-foreground text-sm">{resumeData.skills.languages.join(", ")}</p>
                   </div>
                   <div>
-                    <h4 className="font-semibold mb-2">Technologies:</h4>
-                    <p className="text-muted-foreground">
-                      {[...resumeData.skills.frontend, ...resumeData.skills.backend, ...resumeData.skills.databases, ...resumeData.skills.tools].join(", ")}
-                    </p>
+                    <h4 className="font-semibold mb-2">Tools:</h4>
+                    <p className="text-muted-foreground text-sm">{resumeData.skills.tools.join(", ")}</p>
                   </div>
                   <div>
-                    <h4 className="font-semibold mb-2">Soft Skills:</h4>
-                    <p className="text-muted-foreground">{resumeData.skills.softSkills.join(", ")}</p>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-2">Areas of Interest:</h4>
-                    <p className="text-muted-foreground">{resumeData.interests.join(", ")}</p>
+                    <h4 className="font-semibold mb-2">Core Concepts:</h4>
+                    <p className="text-muted-foreground text-sm">{resumeData.skills.coreConcepts.join(", ")}</p>
                   </div>
                 </div>
               </motion.section>
@@ -247,7 +281,7 @@ const handleDownloadResume = () => {
                 transition={{ duration: 0.6, delay: 0.4 }}
               >
                 <div className="flex items-center gap-2 mb-4">
-                  <Award className="w-5 h-5 text-primary" />
+                  <Trophy className="w-5 h-5 text-yellow-500" />
                   <h2 className="text-2xl font-bold">Achievements</h2>
                 </div>
                 <ul className="pl-7 space-y-2">
