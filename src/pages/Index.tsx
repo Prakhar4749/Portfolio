@@ -3,7 +3,7 @@ import { Typewriter } from "react-simple-typewriter";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { resumeData } from "@/data/resume";
-import { ArrowDown, Github, Linkedin, Code, Zap, Target, Instagram } from "lucide-react";
+import { ArrowDown, Github, Linkedin, Code, Zap, Braces } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const TypewriterText = ({ text, delay = 0 }: { text: string; delay?: number }) => {
@@ -16,7 +16,7 @@ const TypewriterText = ({ text, delay = 0 }: { text: string; delay?: number }) =
         setDisplayText(text.slice(0, currentIndex + 1));
         setCurrentIndex(currentIndex + 1);
       }
-    }, delay + currentIndex * 25); // Reduced from 50ms to 25ms for smoother typing
+    }, delay + currentIndex * 25);
 
     return () => clearTimeout(timer);
   }, [currentIndex, text, delay]);
@@ -39,13 +39,13 @@ const FloatingElements = () => {
           key={i}
           className="absolute w-2 h-2 bg-primary/20 rounded-full"
           initial={{
-            x: Math.random() * window.innerWidth,
-            y: Math.random() * window.innerHeight,
+            x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1000),
+            y: Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 800),
             scale: Math.random() * 0.5 + 0.5
           }}
           animate={{
-            x: Math.random() * window.innerWidth,
-            y: Math.random() * window.innerHeight,
+            x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1000),
+            y: Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 800),
             scale: [0.5, 1, 0.5],
           }}
           transition={{
@@ -89,7 +89,7 @@ const Home = () => {
           <motion.div
             className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent"
             style={{
-              background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(var(--primary), 0.1) 0%, transparent 50%)`
+              background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, hsl(var(--primary) / 0.1) 0%, transparent 50%)`
             }}
           />
         </div>
@@ -177,18 +177,13 @@ const Home = () => {
                   animate={{ opacity: 1, y: 0, x: 0 }}
                   transition={{ duration: 0.8, delay: 0.4 }}
                   className="text-xl md:text-2xl font-bold bg-gradient-to-r from-[#6b21a8] via-[#9333ea] to-[#c084fc] bg-clip-text text-transparent animate-gradient mb-4 dark:from-white dark:via-[#d9c8f9] dark:to-[#b49aed]"
-
-
-
-
-
                 >
                   <Typewriter
                     words={[
-                      'Full Stack Developer',
-                      'Problem Solver',
-                      'MERN Stack Enthusiast',
-                      'Open Source Contributor'
+                      'Java Full Stack Developer',
+                      'Backend Engineer',
+                      'Spring Boot Expert',
+                      'Microservices Architect'
                     ]}
                     loop={true}
                     cursor
@@ -205,7 +200,7 @@ const Home = () => {
                   transition={{ duration: 0.8, delay: 0.6 }}
                   className="text-lg 2xl:text-xl text-muted-foreground mb-8 leading-relaxed max-w-2xl"
                 >
-                  {resumeData.hero.intro}
+                  {resumeData.hero.intro.substring(0, 200)}...
                 </motion.p>
 
                 <motion.div
@@ -263,14 +258,14 @@ const Home = () => {
                     <Linkedin className="w-6 h-6" />
                   </motion.a>
                   <motion.a
-                    href={`https://www.instagram.com/${resumeData.personalInfo.instagram}/`}
+                    href={`https://leetcode.com/u/${resumeData.personalInfo.leetcode}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     whileHover={{ scale: 1.1, rotate: -5 }}
                     whileTap={{ scale: 0.95 }}
                     className="p-4 rounded-full bg-muted hover:bg-muted/80 transition-all duration-300 hover:shadow-lg"
                   >
-                    <Instagram className="w-6 h-6" />
+                    <Braces className="w-6 h-6" />
                   </motion.a>
                 </motion.div>
               </div>
@@ -360,7 +355,7 @@ const Home = () => {
                 transition={{ duration: 0.8, delay: 0.6 }}
                 className="text-base sm:text-lg md:text-xl text-muted-foreground mb-6 sm:mb-8 max-w-2xl lg:max-w-3xl mx-auto leading-relaxed px-4 sm:px-0"
               >
-                {resumeData.hero.intro}
+                {resumeData.hero.intro.substring(0, 200)}...
               </motion.p>
 
               <motion.div
@@ -417,6 +412,16 @@ const Home = () => {
                 >
                   <Linkedin className="w-5 h-5 sm:w-6 sm:h-6" />
                 </motion.a>
+                <motion.a
+                  href={`https://leetcode.com/u/${resumeData.personalInfo.leetcode}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.1, rotate: -5 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="p-3 sm:p-4 rounded-full bg-muted hover:bg-muted/80 transition-all duration-300 hover:shadow-lg"
+                >
+                  <Braces className="w-5 h-5 sm:w-6 sm:h-6" />
+                </motion.a>
               </motion.div>
             </div>
           </div>
@@ -426,92 +431,77 @@ const Home = () => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 1.2 }}
-          className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2"
+          transition={{ delay: 1.5, duration: 0.8 }}
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
         >
           <motion.div
             animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
             className="flex flex-col items-center text-muted-foreground"
           >
-            <span className="text-xs sm:text-sm mb-2">Scroll to explore</span>
-            <ArrowDown className="w-4 h-4 sm:w-5 sm:h-5" />
+            <span className="text-sm mb-2 hidden sm:block">Scroll to explore</span>
+            <ArrowDown className="w-5 h-5" />
           </motion.div>
         </motion.div>
       </section>
 
       {/* Quick Stats Section */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-muted/30">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-20 bg-muted/30">
+        <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-8 sm:mb-12"
+            transition={{ duration: 0.8 }}
+            className="grid grid-cols-2 md:grid-cols-4 gap-8"
           >
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4">
-              Quick Stats
-            </h2>
-            <p className="text-muted-foreground text-sm sm:text-base lg:text-lg max-w-2xl mx-auto">
-              A snapshot of my journey and achievements
-            </p>
+            {[
+              { label: "Projects", value: "3+" },
+              { label: "LeetCode Problems", value: "150+" },
+              { label: "TCS CodeVita Rank", value: "5956" },
+              { label: "Technologies", value: "15+" }
+            ].map((stat, index) => (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="text-center"
+              >
+                <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary mb-2">
+                  {stat.value}
+                </div>
+                <div className="text-sm sm:text-base text-muted-foreground">
+                  {stat.label}
+                </div>
+              </motion.div>
+            ))}
           </motion.div>
+        </div>
+      </section>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              whileHover={{ scale: 1.05 }}
-              className="p-6 sm:p-8 rounded-xl bg-background/50 backdrop-blur-sm border border-border/50 shadow-lg hover:shadow-xl transition-all duration-300"
-            >
-              <div className="flex justify-center mb-4">
-                <div className="p-3 rounded-full bg-primary/10">
-                  <Target className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
-                </div>
-              </div>
-              <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary mb-2">3+</div>
-              <div className="text-muted-foreground text-sm sm:text-base">Years of Experience</div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              whileHover={{ scale: 1.05 }}
-              className="p-6 sm:p-8 rounded-xl bg-background/50 backdrop-blur-sm border border-border/50 shadow-lg hover:shadow-xl transition-all duration-300"
-            >
-              <div className="flex justify-center mb-4">
-                <div className="p-3 rounded-full bg-primary/10">
-                  <Code className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
-                </div>
-              </div>
-              <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary mb-2">
-                {resumeData.projects.length}+
-              </div>
-              <div className="text-muted-foreground text-sm sm:text-base">Projects Completed</div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              whileHover={{ scale: 1.05 }}
-              className="p-6 sm:p-8 rounded-xl bg-background/50 backdrop-blur-sm border border-border/50 shadow-lg hover:shadow-xl transition-all duration-300 sm:col-span-2 lg:col-span-1"
-            >
-              <div className="flex justify-center mb-4">
-                <div className="p-3 rounded-full bg-primary/10">
-                  <Zap className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
-                </div>
-              </div>
-              <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary mb-2">100+</div>
-              <div className="text-muted-foreground text-sm sm:text-base">DSA Problems Solved</div>
-            </motion.div>
-          </div>
+      {/* CTA Section */}
+      <section className="py-20">
+        <div className="container mx-auto px-4 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          >
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              Ready to build something amazing?
+            </h2>
+            <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+              I'm always open to discussing new opportunities and interesting projects.
+            </p>
+            <Link to="/contact">
+              <Button size="lg" className="text-lg px-8 py-4">
+                Let's Connect
+              </Button>
+            </Link>
+          </motion.div>
         </div>
       </section>
     </div>

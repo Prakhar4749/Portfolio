@@ -3,61 +3,40 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { resumeData } from "@/data/resume";
-import { Code, Database, Wrench, Brain, Cloud, Terminal } from "lucide-react";
+import { Code, Database, Wrench, Brain, Cloud, Terminal, Server, Layers } from "lucide-react";
 
 const skillCategories = [
+  {
+    title: "Primary Stack",
+    icon: Server,
+    skills: resumeData.skills.primaryStack.map(skill => ({ name: skill, level: 90 })),
+    color: "text-blue-500"
+  },
+  {
+    title: "Secondary Technologies",
+    icon: Layers,
+    skills: resumeData.skills.secondary.map(skill => ({ name: skill, level: 80 })),
+    color: "text-green-500"
+  },
   {
     title: "Programming Languages",
     icon: Code,
     skills: resumeData.skills.languages.map(skill => ({ name: skill, level: 85 })),
-    color: "text-blue-500"
-  },
-  {
-    title: "Frontend Technologies",
-    icon: Terminal,
-    skills: resumeData.skills.frontend.map(skill => ({ name: skill, level: 80 })),
-    color: "text-green-500"
-  },
-  {
-    title: "Backend Technologies",
-    icon: Database,
-    skills: resumeData.skills.backend.map(skill => ({ name: skill, level: 82 })),
     color: "text-purple-500"
-  },
-  {
-    title: "Databases",
-    icon: Database,
-    skills: resumeData.skills.databases.map(skill => ({ name: skill, level: 75 })),
-    color: "text-orange-500"
   },
   {
     title: "Tools & Technologies",
     icon: Wrench,
-    skills: resumeData.skills.tools.map(skill => ({ name: skill, level: 78 })),
-    color: "text-red-500"
+    skills: resumeData.skills.tools.map(skill => ({ name: skill, level: 82 })),
+    color: "text-orange-500"
   },
   {
-    title: "Cloud Computing",
-    icon: Cloud,
-    skills: resumeData.skills.cloudComputing.map(skill => ({ name: skill, level: 70 })),
-    color: "text-cyan-500"
+    title: "Core Concepts",
+    icon: Brain,
+    skills: resumeData.skills.coreConcepts.map(skill => ({ name: skill, level: 85 })),
+    color: "text-pink-500"
   }
 ];
-
-const softSkillsData = resumeData.skills.softSkills.map(skill => ({
-  name: skill,
-  description: getSkillDescription(skill)
-}));
-
-function getSkillDescription(skill: string): string {
-  const descriptions: { [key: string]: string } = {
-    "Adaptability": "Quick to learn new technologies and adapt to changing requirements",
-    "Problem-Solving": "Strong analytical thinking and systematic approach to complex challenges",
-    "Collaboration": "Effective team player with excellent communication skills",
-    "Efficient use of AI": "Leveraging AI tools to enhance productivity and code quality"
-  };
-  return descriptions[skill] || "";
-}
 
 const Skills = () => {
   return (
@@ -72,7 +51,7 @@ const Skills = () => {
         >
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Skills & Expertise</h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            A comprehensive overview of my technical skills and areas of expertise.
+            A comprehensive overview of my technical skills specializing in Java, Spring Boot, Microservices, and Full Stack Development.
           </p>
         </motion.div>
 
@@ -123,44 +102,6 @@ const Skills = () => {
           ))}
         </div>
 
-        {/* Soft Skills Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="mb-16"
-        >
-          <Card>
-            <CardHeader className="text-center">
-              <div className="flex items-center justify-center gap-3 mb-2">
-                <Brain className="w-6 h-6 text-pink-500" />
-                <CardTitle className="text-2xl">Soft Skills</CardTitle>
-              </div>
-              <CardDescription>
-                Personal qualities that enhance my technical abilities
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {softSkillsData.map((skill, index) => (
-                  <motion.div
-                    key={skill.name}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="p-4 rounded-lg border bg-card/50 hover:bg-card transition-colors"
-                  >
-                    <h3 className="font-semibold mb-2">{skill.name}</h3>
-                    <p className="text-sm text-muted-foreground">{skill.description}</p>
-                  </motion.div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-
         {/* Skills Summary */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -170,7 +111,7 @@ const Skills = () => {
         >
           <Card>
             <CardHeader className="text-center">
-              <CardTitle className="text-2xl">Technology Stack</CardTitle>
+              <CardTitle className="text-2xl">Full Technology Stack</CardTitle>
               <CardDescription>
                 All technologies I work with regularly
               </CardDescription>
@@ -178,12 +119,11 @@ const Skills = () => {
             <CardContent>
               <div className="flex flex-wrap gap-2 justify-center">
                 {[
+                  ...resumeData.skills.primaryStack,
+                  ...resumeData.skills.secondary,
                   ...resumeData.skills.languages,
-                  ...resumeData.skills.frontend,
-                  ...resumeData.skills.backend,
-                  ...resumeData.skills.databases,
-                  ...resumeData.skills.tools.slice(0, 5), // Limit tools to avoid clutter
-                  ...resumeData.skills.cloudComputing
+                  ...resumeData.skills.tools,
+                  ...resumeData.skills.coreConcepts
                 ].map((tech, index) => (
                   <motion.div
                     key={`${tech}-${index}`}
@@ -195,6 +135,42 @@ const Skills = () => {
                   >
                     <Badge variant="secondary" className="text-sm py-1 px-3">
                       {tech}
+                    </Badge>
+                  </motion.div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        {/* Areas of Interest */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="mt-8"
+        >
+          <Card>
+            <CardHeader className="text-center">
+              <CardTitle className="text-2xl">Areas of Interest</CardTitle>
+              <CardDescription>
+                Technologies and domains I'm passionate about
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-wrap gap-3 justify-center">
+                {resumeData.interests.map((interest, index) => (
+                  <motion.div
+                    key={interest}
+                    initial={{ opacity: 0, scale: 0 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                    whileHover={{ scale: 1.05 }}
+                  >
+                    <Badge variant="outline" className="text-sm py-2 px-4">
+                      {interest}
                     </Badge>
                   </motion.div>
                 ))}

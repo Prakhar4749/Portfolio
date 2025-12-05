@@ -6,11 +6,11 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { Navbar } from "@/components/layout/Navbar";
 import Home from "./pages/Index";
-import About from "./pages/about";
-import Projects from "./pages/projects";
-import Skills from "./pages/skills";
-import Resume from "./pages/resume";
-import Contact from "./pages/contact";
+import About from "./pages/About";
+import Projects from "./pages/Projects";
+import Skills from "./pages/Skills";
+import Resume from "./pages/Resume";
+import Contact from "./pages/Contact";
 import NotFound from "./pages/404";
 
 const queryClient = new QueryClient();

@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { resumeData } from "@/data/resume";
-import { Calendar, MapPin, Building } from "lucide-react";
+import { Calendar, MapPin, Building, Trophy, Globe } from "lucide-react";
 
 const About = () => {
   return (
@@ -40,10 +40,7 @@ const About = () => {
                     {resumeData.hero.intro}
                   </p>
                   <p className="text-muted-foreground leading-relaxed">
-                    Currently pursuing my B.Tech in Information Technology, I've gained hands-on experience 
-                    through internships at leading companies, working on real-world projects that impact users 
-                    and businesses. My journey has been focused on building scalable, efficient solutions using 
-                    modern web technologies.
+                    Ranked globally in TCS CodeVita. Seeking backend or full-stack engineering roles to build reliable, high-performance systems.
                   </p>
                 </CardContent>
               </Card>
@@ -80,7 +77,10 @@ const About = () => {
                             <div className="flex items-center gap-2 text-muted-foreground">
                               <Building className="w-4 h-4" />
                               <span>{exp.company}</span>
-                              {exp.type && <span>• {exp.type}</span>}
+                            </div>
+                            <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
+                              <MapPin className="w-4 h-4" />
+                              <span>{exp.location}</span>
                             </div>
                             <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
                               <Calendar className="w-4 h-4" />
@@ -124,8 +124,12 @@ const About = () => {
                   <div className="space-y-2">
                     <h3 className="font-semibold">{resumeData.education.degree}</h3>
                     <div className="flex items-center gap-2 text-muted-foreground text-sm">
-                      <MapPin className="w-4 h-4" />
+                      <Building className="w-4 h-4" />
                       <span>{resumeData.education.institution}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-muted-foreground text-sm">
+                      <MapPin className="w-4 h-4" />
+                      <span>{resumeData.education.location}</span>
                     </div>
                     <div className="flex items-center gap-2 text-muted-foreground text-sm">
                       <Calendar className="w-4 h-4" />
@@ -145,7 +149,10 @@ const About = () => {
             >
               <Card>
                 <CardHeader>
-                  <CardTitle>Achievements</CardTitle>
+                  <div className="flex items-center gap-2">
+                    <Trophy className="w-5 h-5 text-yellow-500" />
+                    <CardTitle>Achievements</CardTitle>
+                  </div>
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-3">
@@ -178,6 +185,33 @@ const About = () => {
                       </Badge>
                     ))}
                   </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            {/* Website */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+            >
+              <Card>
+                <CardHeader>
+                  <div className="flex items-center gap-2">
+                    <Globe className="w-5 h-5 text-primary" />
+                    <CardTitle>Website</CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <a 
+                    href={`https://${resumeData.personalInfo.website}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary hover:underline"
+                  >
+                    {resumeData.personalInfo.website}
+                  </a>
                 </CardContent>
               </Card>
             </motion.div>
