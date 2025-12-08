@@ -8,7 +8,7 @@ export const resumeData = {
     linkedin: "prakhar2712",
     leetcode: "prakhar_2712"
   },
-  
+
   hero: {
     headline: "Java Full Stack Developer",
     intro: "Java Full Stack Developer and Backend Engineer specializing in Java, Spring Boot, Microservices, and React. Experienced in designing scalable backend architectures, secure authentication flows, and production-ready deployments. Delivered applications including a payroll automation platform and a real-time B2B marketplace. Strong foundation in DSA, System Design, Docker, Redis, and SQL.",
@@ -40,33 +40,33 @@ export const resumeData = {
   projects: [
     {
       id: 1,
-      name: "University IT Dept. Portal",
-      status: "In Development",
-      description: "Architecting a scalable microservices system using Spring Boot and React with polyglot persistence (PostgreSQL + MongoDB) and API Gateway-style routing. Building modules including resume parsing, approval workflows, and Redis-accelerated public data, secured with Spring Security (JWT) and RBAC.",
-      technologies: ["Spring Boot", "React", "Docker", "PostgreSQL", "MongoDB", "Redis", "Spring Security", "JWT"],
-      github: "https://github.com/Prakhar4749/University-IT-Portal",
-      srs: "#",
+      name: "Retail Sales Management System",
+      status: "Completed",
+      description: "Developed a high-performance inventory dashboard using Spring Boot and React. Engineered a custom dynamic SQL query builder (JDBC) to handle 10 Lakh+ (1M+) records, achieving <200ms latency via server-side pagination and reducing query overhead by 40% compared to standard JPA.",
+      technologies: ["Spring Boot", "React", "JDBC", "SQL", "PostgreSQL", "Context API"],
+      github: "https://github.com/Prakhar4749/RetailSalesManagementSystem", // Update this link if different
+      liveDemo: "https://retail-manager.prakhar.life/", // Add link if available
       featured: true
     },
     {
       id: 2,
       name: "Payroll Management System",
       status: "Deployed",
-      description: "Developed and deployed a production-ready payroll automation platform using Spring Boot, React, and MySQL, reducing manual processing and improving reliability for the accounts department. Implemented secure JWT authentication with role-based access control and optimized data persistence using Hibernate/JPA.",
+      description: "Developed and deployed a production-ready payroll automation platform using Spring Boot, React, and MySQL, reducing manual processing and improving reliability. Implemented secure JWT authentication with role-based access control (RBAC) and optimized data persistence using Hibernate/JPA.",
       technologies: ["Java", "Spring Boot", "React", "MySQL", "JWT", "Hibernate/JPA"],
-      github: "https://github.com/Prakhar4749/payroll",
-      liveDemo: "https://payroll-frontend-omega.vercel.app/",
+      github: "https://github.com/Prakhar4749/payroll-system",
+      liveDemo: "https://payroll.project.prakhar.life/",
       featured: true,
       credentials: "Username: admin, Password: admin"
     },
     {
       id: 3,
-      name: "Cohort Platform API",
-      status: "Completed",
-      description: "Developed a REST API with media handling, authentication, pagination, and Postman documentation, deployed with production-ready configurations.",
-      technologies: ["Node.js", "MongoDB", "Express.js", "Cloudinary", "JWT"],
-      github: "https://github.com/Prakhar4749/cohort_platform_assesment",
-      liveDemo: "https://cohortplatform.onrender.com/",
+      name: "University IT Dept. Portal",
+      status: "In Development",
+      description: "Architecting a scalable microservices system using Spring Boot and React with polyglot persistence (PostgreSQL + MongoDB) and API Gateway-style routing. Building modules including resume parsing, approval workflows, and Redis-accelerated public data.",
+      technologies: ["Spring Boot", "React", "Docker", "PostgreSQL", "MongoDB", "Redis", "Spring Security"],
+      github: "https://github.com/Prakhar4749/University-IT-Portal",
+      srs: "#",
       featured: true
     }
   ],
@@ -78,6 +78,7 @@ export const resumeData = {
       "Spring Cloud (Gateway, Eureka)",
       "Spring Security (JWT)",
       "Hibernate/JPA",
+      "JDBC (Native SQL)",
       "Microservices Architecture",
       "PostgreSQL",
       "MySQL",
