@@ -44,7 +44,7 @@ export default function Projects() {
         description="Explore Prakhar's featured projects, starred GitHub repos and open source work." 
         path="/projects" 
       />
-      <div className="min-h-screen pt-28 pb-20 px-6">
+      <div className="min-h-screen pt-24 md:pt-28 pb-16 md:pb-20 px-4 md:px-6">
       <div className="max-w-7xl mx-auto">
 
         <SectionHeader
@@ -55,13 +55,13 @@ export default function Projects() {
         />
 
         {/* Tab Switcher */}
-        <div className="flex justify-center mb-10">
-          <GlassCard className="p-1.5 flex gap-1" hover={false}>
+        <div className="flex overflow-x-auto no-scrollbar mb-10 -mx-4 px-4 sm:mx-0 sm:px-0 sm:justify-center">
+          <GlassCard className="p-1.5 flex gap-1 min-w-max" hover={false}>
             {tabs.map(({ id, label, icon: Icon }) => (
               <button
                 key={id}
                 onClick={() => { setActiveTab(id); setLangFilter("All"); }}
-                className={`relative flex items-center gap-2 px-5 py-2.5 rounded-lg font-mono text-sm font-medium transition-all duration-200 ${
+                className={`relative flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg font-mono text-xs sm:text-sm font-medium transition-all duration-200 ${
                   activeTab === id
                     ? "dark:text-cyan-400 text-cyan-600"
                     : "dark:text-white/50 text-slate-500 dark:hover:text-white/80 hover:text-slate-800"
@@ -133,7 +133,7 @@ export default function Projects() {
                       )}
 
                       {/* Links */}
-                      <div className="flex gap-2 pt-2 border-t dark:border-white/[0.06] border-black/[0.06]">
+                      <div className="flex gap-4 pt-4 border-t dark:border-white/[0.06] border-black/[0.06]">
                         {!!project.github?.trim() && (
                           <a
                             href={project.github}
@@ -178,13 +178,13 @@ export default function Projects() {
             >
               {/* Language filter pills */}
               {!loading && !error && (
-                <div className="flex flex-wrap gap-2 items-center">
-                  <Filter className="w-3.5 h-3.5 dark:text-white/30 text-slate-400" />
+                <div className="flex flex-wrap gap-2 items-center overflow-x-auto no-scrollbar pb-1">
+                  <Filter className="w-3.5 h-3.5 dark:text-white/30 text-slate-400 flex-shrink-0" />
                   {languages.map((lang) => (
                     <button
                       key={lang}
                       onClick={() => setLangFilter(lang)}
-                      className={`px-3 py-1 rounded-full font-mono text-xs border transition-all duration-200 ${
+                      className={`px-3 py-1 rounded-full font-mono text-[10px] sm:text-xs border transition-all duration-200 flex-shrink-0 ${
                         langFilter === lang
                           ? "dark:bg-cyan-500/20 bg-cyan-500/20 dark:border-cyan-500/40 border-cyan-500/40 dark:text-cyan-400 text-cyan-600"
                           : "dark:bg-white/5 bg-black/5 dark:border-white/10 border-black/10 dark:text-white/50 text-slate-500 dark:hover:border-white/20 hover:border-black/20"

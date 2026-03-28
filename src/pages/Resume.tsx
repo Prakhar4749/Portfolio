@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import {
   Download, ExternalLink, Briefcase, GraduationCap,
-  Code2, Award, Calendar, ChevronRight
+  Code2, Award, Calendar, ChevronRight, MapPin
 } from "lucide-react";
 import { SectionHeader } from "@/components/ui/section-header";
 import { GlassCard } from "@/components/ui/glass-card";
@@ -65,9 +65,9 @@ export default function Resume() {
     : [];
 
   return (
-    <div className="min-h-screen pt-28 pb-20 px-6">
+    <div className="min-h-screen pt-24 md:pt-28 pb-16 md:pb-20 px-4 md:px-6">
       <PageSEO title="Resume" description="Prakhar's professional resume — experience, education, and technical expertise." path="/resume" />
-      <div className="max-w-5xl mx-auto space-y-16">
+      <div className="max-w-5xl mx-auto space-y-12 md:space-y-16">
 
         <SectionHeader
           label="// curriculum vitae"
@@ -81,13 +81,13 @@ export default function Resume() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="flex flex-wrap justify-center gap-4"
+          className="flex flex-col sm:flex-row justify-center gap-4 px-4 sm:px-0"
         >
           <motion.button
             onClick={handleDownload}
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
-            className="flex items-center gap-2 px-6 py-3 rounded-xl font-mono text-sm font-medium
+            className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-mono text-sm font-medium
               dark:bg-cyan-500/15 bg-cyan-500/20 dark:border-cyan-500/30 border-cyan-500/40 border
               dark:text-cyan-400 text-cyan-700 hover:shadow-glow-cyan transition-all duration-300"
           >
@@ -101,7 +101,7 @@ export default function Resume() {
             rel="noopener noreferrer"
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
-            className="flex items-center gap-2 px-6 py-3 rounded-xl font-mono text-sm font-medium
+            className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-mono text-sm font-medium
               dark:bg-white/5 bg-black/5 dark:border-white/10 border-black/10 border
               dark:text-white/70 text-slate-700 dark:hover:bg-white/10 hover:bg-black/8
               dark:hover:border-white/20 hover:border-black/20 transition-all duration-300"
@@ -117,37 +117,37 @@ export default function Resume() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
         >
-          <GlassCard glow="cyan" className="p-8">
+          <GlassCard glow="cyan" className="p-6 md:p-8">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
               <div>
-                <h1 className="text-3xl font-bold dark:text-white text-slate-900">
+                <h1 className="text-2xl md:text-3xl font-bold dark:text-white text-slate-900">
                   {personalInfo.name}
                 </h1>
                 <p className="dark:text-cyan-400 text-cyan-600 font-mono text-sm mt-1">
                   Full Stack Developer · CS Student
                 </p>
-                <p className="dark:text-white/50 text-slate-600 text-sm mt-3 max-w-lg leading-relaxed">
+                <p className="dark:text-white/50 text-slate-600 text-sm mt-4 max-w-lg leading-relaxed">
                   {personalInfo.bio}
                 </p>
               </div>
-              <div className="space-y-2 font-mono text-xs flex-shrink-0">
+              <div className="space-y-2.5 font-mono text-xs flex-shrink-0 border-t md:border-t-0 pt-4 md:pt-0 dark:border-white/5 border-black/5">
                 {personalInfo.email && (
                   <div className="flex items-center gap-2 dark:text-white/50 text-slate-600">
-                    <span className="dark:text-cyan-400/60 text-cyan-600/70">email</span>
+                    <span className="w-16 dark:text-cyan-400/60 text-cyan-600/70">email</span>
                     <ChevronRight className="w-3 h-3 dark:text-white/20 text-slate-300" />
-                    {personalInfo.email}
+                    <span className="truncate">{personalInfo.email}</span>
                   </div>
                 )}
                 {personalInfo.location && (
                   <div className="flex items-center gap-2 dark:text-white/50 text-slate-600">
-                    <span className="dark:text-cyan-400/60 text-cyan-600/70">location</span>
+                    <span className="w-16 dark:text-cyan-400/60 text-cyan-600/70">location</span>
                     <ChevronRight className="w-3 h-3 dark:text-white/20 text-slate-300" />
                     {personalInfo.location}
                   </div>
                 )}
                 {personalInfo.github && (
                   <div className="flex items-center gap-2 dark:text-white/50 text-slate-600">
-                    <span className="dark:text-cyan-400/60 text-cyan-600/70">github</span>
+                    <span className="w-16 dark:text-cyan-400/60 text-cyan-600/70">github</span>
                     <ChevronRight className="w-3 h-3 dark:text-white/20 text-slate-300" />
                     Prakhar4749
                   </div>
@@ -220,11 +220,17 @@ export default function Resume() {
                         <Calendar className="w-3 h-3" />
                         {edu.duration || edu.period || edu.year}
                       </span>
-                      {(edu.cgpa || edu.gpa || edu.percentage) && (
+                       {edu.location && (
+                    <div className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider dark:text-white/40 text-slate-500 bg-white/5 dark:bg-violet-500/5 px-2 py-1 rounded-md border border-violet-500/10">
+                      <MapPin className="w-3 h-3 text-violet-500" />
+                      {edu.location}
+                    </div>
+                  )}
+                      {/* {(edu.cgpa || edu.gpa || edu.percentage) && (
                         <span className="dark:text-cyan-400/70 text-cyan-600/80">
                           {edu.cgpa || edu.gpa || edu.percentage}
                         </span>
-                      )}
+                      )} */}
                     </div>
                   </GlassCard>
                 </motion.div>

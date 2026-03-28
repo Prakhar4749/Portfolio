@@ -75,14 +75,14 @@ const socialLinks = [
   {
     icon: Github,
     label: "GitHub",
-    href: personalInfo.github ? `https://github.com/${personalInfo.github}` : "https://github.com/Prakhar4749",
+    href: personalInfo.github ? `{personalInfo.github}` : "https://github.com/Prakhar4749",
     value: personalInfo.github || "Prakhar4749",
   },
   {
     icon: Linkedin,
     label: "LinkedIn",
-    href: personalInfo.linkedin ? `https://linkedin.com/in/${personalInfo.linkedin}` : "#",
-    value: "Connect on LinkedIn",
+    href: personalInfo.linkedin ? `${personalInfo.linkedin}` : "https://www.linkedin.com/in/prakhar2712/",
+    value: personalInfo.linkedin || "prakhar2712" ,
   },
 ];
 
@@ -124,7 +124,7 @@ export default function Contact() {
         description="Get in touch with Prakhar for freelance, collaboration or full-time opportunities." 
         path="/contact" 
       />
-      <div className="min-h-screen pt-28 pb-20 px-6">
+      <div className="min-h-screen pt-24 md:pt-28 pb-16 md:pb-20 px-4 md:px-6">
       <div className="max-w-6xl mx-auto">
 
         <SectionHeader
@@ -134,11 +134,11 @@ export default function Contact() {
           description="Have a project in mind, want to collaborate, or just want to say hi? My inbox is always open."
         />
 
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
 
           {/* Left — Contact Info */}
           <motion.div
-            className="lg:col-span-2 space-y-4"
+            className="md:col-span-2 space-y-4"
             initial={{ opacity: 0, x: -24 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
@@ -218,12 +218,12 @@ export default function Contact() {
 
           {/* Right — Form */}
           <motion.div
-            className="lg:col-span-3"
+            className="md:col-span-3"
             initial={{ opacity: 0, x: 24 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
           >
-            <GlassCard glow="violet" className="p-8">
+            <GlassCard glow="violet" className="p-6 md:p-8">
               <h3 className="font-mono text-sm dark:text-white/60 text-slate-600 mb-6 flex items-center gap-2">
                 <MessageSquare className="w-4 h-4 dark:text-violet-400 text-violet-600" />
                 Send a Message
@@ -236,7 +236,7 @@ export default function Contact() {
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0 }}
-                    className="flex flex-col items-center justify-center py-16 gap-4 text-center"
+                    className="flex flex-col items-center justify-center py-12 md:py-16 gap-4 text-center"
                   >
                     <div className="w-16 h-16 rounded-full dark:bg-green-500/10 bg-green-500/15 dark:border-green-500/20 border-green-400/30 border flex items-center justify-center">
                       <CheckCircle className="w-8 h-8 text-green-400" />

@@ -88,8 +88,8 @@ export default function Skills() {
         description="Prakhar's technical skills — React, TypeScript, Node.js, Java, and more." 
         path="/skills" 
       />
-      <div className="min-h-screen pt-28 pb-20 px-6">
-      <div className="max-w-6xl mx-auto space-y-16">
+      <div className="min-h-screen pt-24 md:pt-28 pb-16 md:pb-20 px-4 md:px-6">
+      <div className="max-w-6xl mx-auto space-y-12 md:space-y-16">
 
         <SectionHeader
           label="// expertise"
@@ -110,7 +110,7 @@ export default function Skills() {
                 viewport={{ once: true }}
                 transition={{ delay: ci * 0.1, duration: 0.5 }}
               >
-                <GlassCard glow={glow} className="p-6 h-full">
+                <GlassCard glow={glow} className="p-5 md:p-6 h-full">
                   <div className="flex items-center gap-3 mb-6">
                     <span className={`px-3 py-1 rounded-full font-mono text-xs font-medium border dark:border-transparent ${accent}`}>
                       {cat.category}
@@ -140,7 +140,7 @@ export default function Skills() {
           <h3 className="font-mono text-xs tracking-widest dark:text-white/30 text-slate-400 uppercase mb-6 text-center">
             Full Stack at a Glance
           </h3>
-          <div className="flex flex-wrap justify-center gap-2.5">
+          <div className="flex flex-wrap justify-center gap-2 md:gap-2.5">
             {allSkills.map((skill, i) => (
               <motion.span
                 key={skill}
@@ -149,7 +149,7 @@ export default function Skills() {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.03, duration: 0.3 }}
                 whileHover={{ scale: 1.08, y: -2 }}
-                className="px-3 py-1.5 rounded-full font-mono text-xs cursor-default
+                className="px-2.5 py-1.5 md:px-3 md:py-1.5 rounded-full font-mono text-[10px] md:text-xs cursor-default
                   dark:bg-white/[0.04] bg-black/[0.04] dark:border-white/[0.07] border-black/[0.07] border
                   dark:text-white/55 text-slate-600 dark:hover:border-cyan-500/30 hover:border-cyan-400/40
                   dark:hover:text-cyan-400 hover:text-cyan-600 dark:hover:bg-cyan-500/8 hover:bg-cyan-500/10

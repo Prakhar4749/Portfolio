@@ -29,8 +29,8 @@ export default function About() {
         description="Learn about Prakhar's journey, experience, education and achievements." 
         path="/about" 
       />
-      <div className="min-h-screen pt-28 pb-20 px-6">
-      <div className="max-w-6xl mx-auto space-y-20">
+      <div className="min-h-screen pt-24 md:pt-28 pb-16 md:pb-20 px-4 md:px-6">
+      <div className="max-w-6xl mx-auto space-y-16 md:space-y-20">
 
         <SectionHeader
           label="// about me"
@@ -40,8 +40,8 @@ export default function About() {
         />
 
         {/* Bio + Quick Stats */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <GlassCard glow="cyan" className="lg:col-span-2 p-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <GlassCard glow="cyan" className="md:col-span-2 p-6 md:p-8">
             <h3 className="font-mono text-xs tracking-widest dark:text-cyan-400/60 text-cyan-600/70 uppercase mb-4">
               The Story
             </h3>
@@ -61,13 +61,13 @@ export default function About() {
             </div>
           </GlassCard>
 
-          <div className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-1 gap-4">
             {[
               { label: "Projects Completed", value: "10+", color: "cyan" as const },
               { label: "Technologies", value: "15+", color: "violet" as const },
               { label: "GitHub Contributions", value: "Active", color: "cyan" as const },
             ].map(({ label, value, color }) => (
-              <GlassCard key={label} glow={color} className="p-6 text-center">
+              <GlassCard key={label} glow={color} className="p-6 text-center flex flex-col justify-center">
                 <div className="text-3xl font-bold font-mono mb-1">
                   <NeonText color={color}>{value}</NeonText>
                 </div>
@@ -79,114 +79,137 @@ export default function About() {
           </div>
         </div>
 
-        {/* Experience Timeline */}
-        {experience && experience.length > 0 && (
-          <section>
-            <div className="flex items-center gap-3 mb-8">
-              <div className="w-9 h-9 rounded-xl dark:bg-cyan-500/10 bg-cyan-500/15 dark:border-cyan-500/20 border-cyan-400/30 border flex items-center justify-center">
-                <Briefcase className="w-4 h-4 dark:text-cyan-400 text-cyan-600" />
+       {/* Experience Timeline */}
+{experience && experience.length > 0 && (
+  <section>
+    <div className="flex items-center gap-3 mb-8">
+      <div className="w-9 h-9 rounded-xl dark:bg-cyan-500/10 bg-cyan-500/15 dark:border-cyan-500/20 border-cyan-400/30 border flex items-center justify-center">
+        <Briefcase className="w-4 h-4 dark:text-cyan-400 text-cyan-600" />
+      </div>
+      <h2 className="text-2xl font-bold dark:text-white text-slate-900">
+        Experience <NeonText color="cyan">Timeline</NeonText>
+      </h2>
+    </div>
+
+    <div className="relative space-y-6 pl-6 md:pl-8">
+      {/* Vertical line */}
+      <div className="absolute left-2.5 md:left-3.5 top-2 bottom-2 w-px dark:bg-gradient-to-b dark:from-cyan-500/40 dark:via-violet-500/40 dark:to-transparent bg-gradient-to-b from-cyan-500/30 via-violet-500/30 to-transparent" />
+
+      {experience.map((exp: any, i: number) => (
+        <motion.div
+          key={i}
+          custom={i}
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+          className="relative"
+        >
+          {/* Timeline dot */}
+          <div className="absolute -left-6 md:-left-8 top-5 w-3 h-3 rounded-full dark:bg-cyan-400 bg-cyan-600 shadow-glow-cyan border-2 dark:border-black/80 border-white" />
+
+          <GlassCard className="p-5 md:p-6 ml-2">
+            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-4">
+              <div>
+                {/* Changed exp.position to exp.role to match your data object */}
+                <h3 className="font-bold dark:text-white text-slate-900 text-lg">{exp.role}</h3>
+                <p className="dark:text-cyan-400 text-cyan-600 font-mono text-sm">{exp.company}</p>
               </div>
-              <h2 className="text-2xl font-bold dark:text-white text-slate-900">
-                Experience <NeonText color="cyan">Timeline</NeonText>
-              </h2>
+              <div className="inline-flex items-center gap-1.5 font-mono text-[10px] md:text-xs dark:text-white/40 text-slate-500 dark:bg-white/5 bg-black/5 px-3 py-1.5 rounded-full border dark:border-white/10 border-black/10 self-start sm:self-auto">
+                <Calendar className="w-3 h-3" />
+                {exp.duration}
+              </div>
             </div>
 
-            <div className="relative space-y-6 pl-8">
-              {/* Vertical line */}
-              <div className="absolute left-3.5 top-2 bottom-2 w-px dark:bg-gradient-to-b dark:from-cyan-500/40 dark:via-violet-500/40 dark:to-transparent bg-gradient-to-b from-cyan-500/30 via-violet-500/30 to-transparent" />
+            {/* Display the summary description */}
+            <p className="text-sm dark:text-white/70 text-slate-700 leading-relaxed mb-4">
+              {exp.description}
+            </p>
 
-              {experience.map((exp: any, i: number) => (
-                <motion.div
-                  key={i}
-                  custom={i}
-                  variants={fadeUp}
-                  initial="hidden"
-                  whileInView="show"
-                  viewport={{ once: true }}
-                  className="relative"
-                >
-                  {/* Timeline dot */}
-                  <div className="absolute -left-8 top-5 w-3 h-3 rounded-full dark:bg-cyan-400 bg-cyan-600 shadow-glow-cyan border-2 dark:border-black/80 border-white" />
-
-                  <GlassCard className="p-6 ml-2">
-                    <div className="flex flex-wrap items-start justify-between gap-2 mb-3">
-                      <div>
-                        <h3 className="font-bold dark:text-white text-slate-900">{exp.position}</h3>
-                        <p className="dark:text-cyan-400 text-cyan-600 font-mono text-sm">{exp.company}</p>
-                      </div>
-                      <div className="flex items-center gap-1.5 font-mono text-xs dark:text-white/40 text-slate-500 dark:bg-white/5 bg-black/5 px-3 py-1.5 rounded-full border dark:border-white/10 border-black/10">
-                        <Calendar className="w-3 h-3" />
-                        {exp.duration}
-                      </div>
-                    </div>
-                    {exp.description && Array.isArray(exp.description) ? (
-                      <ul className="space-y-1.5">
-                        {exp.description.map((h: string, j: number) => (
-                          <li key={j} className="flex items-start gap-2 text-sm dark:text-white/50 text-slate-600">
-                            <span className="dark:text-cyan-400 text-cyan-600 mt-0.5 flex-shrink-0">▸</span>
-                            {h}
-                          </li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <p className="text-sm dark:text-white/55 text-slate-600 leading-relaxed">{exp.description}</p>
-                    )}
-                  </GlassCard>
-                </motion.div>
-              ))}
-            </div>
-          </section>
-        )}
+            {/* Render Highlights if they exist */}
+            {exp.highlights && exp.highlights.length > 0 && (
+              <ul className="space-y-2">
+                {exp.highlights.map((highlight: string, j: number) => (
+                  <li key={j} className="flex items-start gap-2 text-sm dark:text-white/50 text-slate-600">
+                    <span className="dark:text-cyan-400 text-cyan-600 mt-1 flex-shrink-0 text-xs">
+                      ●
+                    </span>
+                    <span className="leading-snug">{highlight}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </GlassCard>
+        </motion.div>
+      ))}
+    </div>
+  </section>
+)}
 
         {/* Education */}
-        {normalizedEducation.length > 0 && (
-          <section>
-            <div className="flex items-center gap-3 mb-8">
-              <div className="w-9 h-9 rounded-xl dark:bg-violet-500/10 bg-violet-500/15 dark:border-violet-500/20 border-violet-400/30 border flex items-center justify-center">
-                <GraduationCap className="w-4 h-4 dark:text-violet-400 text-violet-600" />
+{normalizedEducation.length > 0 && (
+  <section>
+    <div className="flex items-center gap-3 mb-8">
+      <div className="w-9 h-9 rounded-xl dark:bg-violet-500/10 bg-violet-500/15 dark:border-violet-500/20 border-violet-400/30 border flex items-center justify-center">
+        <GraduationCap className="w-4 h-4 dark:text-violet-400 text-violet-600" />
+      </div>
+      <h2 className="text-2xl font-bold dark:text-white text-slate-900">
+        <NeonText color="violet">Education</NeonText>
+      </h2>
+    </div>
+
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+      {normalizedEducation.map((edu: any, i: number) => (
+        <motion.div
+          key={i}
+          custom={i}
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+        >
+          <GlassCard glow="violet" className="p-6 h-full">
+            <div className="flex items-start gap-4">
+              <div className="w-10 h-10 rounded-xl dark:bg-violet-500/10 bg-violet-500/15 dark:border-violet-500/20 border-violet-400/30 border flex items-center justify-center flex-shrink-0">
+                <GraduationCap className="w-5 h-5 dark:text-violet-400 text-violet-600" />
               </div>
-              <h2 className="text-2xl font-bold dark:text-white text-slate-900">
-                <NeonText color="violet">Education</NeonText>
-              </h2>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              {normalizedEducation.map((edu: any, i: number) => (
-                <motion.div
-                  key={i}
-                  custom={i}
-                  variants={fadeUp}
-                  initial="hidden"
-                  whileInView="show"
-                  viewport={{ once: true }}
-                >
-                  <GlassCard glow="violet" className="p-6 h-full">
-                    <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 rounded-xl dark:bg-violet-500/10 bg-violet-500/15 dark:border-violet-500/20 border-violet-400/30 border flex items-center justify-center flex-shrink-0">
-                        <GraduationCap className="w-5 h-5 dark:text-violet-400 text-violet-600" />
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="font-bold dark:text-white text-slate-900 leading-snug">
-                          {edu.degree}
-                        </h3>
-                        <p className="dark:text-violet-400 text-violet-600 font-mono text-sm mt-1">
-                          {edu.institution}
-                        </p>
-                        <div className="flex flex-wrap gap-3 mt-3">
-                          <span className="font-mono text-xs dark:text-white/40 text-slate-500 flex items-center gap-1">
-                            <Calendar className="w-3 h-3" />
-                            {edu.duration}
-                          </span>
-                        </div>
-                      </div>
+              <div className="flex-1">
+                <h3 className="font-bold dark:text-white text-slate-900 leading-snug">
+                  {edu.degree}
+                </h3>
+                <p className="dark:text-violet-400 text-violet-600 font-mono text-sm mt-1">
+                  {edu.institution}
+                </p>
+                
+                {/* Meta details: Duration, Location, and Grade */}
+                <div className="flex flex-wrap gap-x-4 gap-y-2 mt-4">
+                  <div className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider dark:text-white/40 text-slate-500 bg-white/5 dark:bg-violet-500/5 px-2 py-1 rounded-md border border-violet-500/10">
+                    <Calendar className="w-3 h-3 text-violet-500" />
+                    {edu.duration}
+                  </div>
+                  
+                  {edu.location && (
+                    <div className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider dark:text-white/40 text-slate-500 bg-white/5 dark:bg-violet-500/5 px-2 py-1 rounded-md border border-violet-500/10">
+                      <MapPin className="w-3 h-3 text-violet-500" />
+                      {edu.location}
                     </div>
-                  </GlassCard>
-                </motion.div>
-              ))}
-            </div>
-          </section>
-        )}
+                  )}
 
+                  {/* {edu.cgpa && (
+                    <div className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider dark:text-violet-400 text-violet-600 bg-violet-500/10 px-2 py-1 rounded-md border border-violet-500/20">
+                      <Award className="w-3 h-3" />
+                      {edu.cgpa}
+                    </div>
+                  )} */}
+                </div>
+              </div>
+            </div>
+          </GlassCard>
+        </motion.div>
+      ))}
+    </div>
+  </section>
+)}
         {/* Achievements */}
         {achievements && achievements.length > 0 && (
           <section>

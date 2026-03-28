@@ -5,24 +5,23 @@ export const personalInfo = {
   website: "https://www.prakhar.life",
   github: "https://github.com/Prakhar4749",
   location: "Bhopal, India",
-  linkedin: "https://www.linkedin.com/in/prakhar2712/",
+  linkedin: "https://linkedin.com/in/prakhar2712/",
   leetcode: "https://leetcode.com/u/prakhar_2712/",
-  bio: "Results-oriented Java Full Stack Developer specializing in Microservices, Event-Driven Architecture, and AI-powered automation."
+  bio: "GATE CSE 2026 Qualified. I build and self-host high-performance Java backend systems using Spring Boot, Microservices, and Kafka."
 };
 
 export const hero = {
   headline: "Java Full Stack Developer",
-  intro: "Results-oriented Java Full Stack Developer specializing in Microservices, Event-Driven Architecture, and AI-powered automation. Experienced in building and self-hosting production-grade systems using Spring Boot, Kafka, and Docker on personal Virtual Machines.",
-  tagline: "Building reliable, high-performance systems",
+  intro: "I bridge the gap between academic rigor and production-grade engineering. As a GATE CSE 2026 qualified developer, I specialize in building scalable Microservices and AI-integrated workflows, with a focus on self-hosted infrastructure and system reliability.",
+  tagline: "Engineering resilient, high-performance systems from code to cloud.",
   taglines: [
+    "GATE CSE 2026 Qualified",
     "Java Full Stack Developer",
-    "Spring Boot Expert",
-    "Microservices Architect",
-    "Backend Specialist",
-    "Problem Solver",
+    "Spring Boot & Microservices",
+    "300+ DSA Problems Solved",
+    "System Design Enthusiast",
   ],
 };
-
 export const projects = [
   {
     title: "Coindesk: Crypto Trading Simulator",
@@ -111,24 +110,24 @@ export const skills = [
 
 export const achievements = [
   {
+    title: "GATE CSE 2026 Qualified",
+    description: "Secured a Score of 461, demonstrating a strong grasp of core Computer Science fundamentals and engineering principles.",
+    icon: "🎓"
+  },
+  {
+    title: "TCS CodeVita Season 13",
+    description: "Advanced to Round 2 with a Global Rank of 5956, placing within the Top 5% of participants worldwide.",
+    icon: "🏅"
+  },
+  {
     title: "Claude Code in Action",
-    description: "Completed official certification covering AI-assisted development and production workflows.",
+    description: "Completed official certification by Anthropic, focusing on AI-assisted development and production-ready workflows.",
     link: "https://drive.google.com/file/d/1ru_6rURA8ite4ASGzEqZrb7SwfQW-8v6/view?usp=sharing",
     icon: "🏆"
   },
   {
-    title: "TCS CodeVita Season 13",
-    description: "Qualified Round 2 with a Global Rank of 5956 (Top 5% of participants).",
-    icon: "🏅"
-  },
-  {
-    title: "CodeAdept 8.0",
-    description: "Secured Top 20 University Rank for algorithmic problem-solving.",
-    icon: "🥇"
-  },
-  {
     title: "300+ DSA Problems",
-    description: "Solved across coding platforms, demonstrating strong algorithmic proficiency.",
+    description: "Solved across all major competitive platforms; secured a Top 20 University Rank in CodeAdept 8.0.",
     icon: "💻"
   }
 ];
