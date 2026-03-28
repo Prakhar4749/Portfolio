@@ -1,368 +1,259 @@
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { Github, ExternalLink, Star, GitFork, FileText } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { resumeData } from "@/data/resume";
+import { useState, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Github, Star, RefreshCw, AlertCircle, Filter, ExternalLink } from "lucide-react";
+import { SectionHeader } from "@/components/ui/section-header";
+import { RepoCard } from "@/components/ui/repo-card";
+import { RepoSkeleton } from "@/components/ui/repo-skeleton";
+import { GlassCard } from "@/components/ui/glass-card";
+import { useGitHubStarred } from "@/hooks/useGitHubStarred";
+import { projects as featuredProjects } from "@/data/resume";
 
-interface Repository {
-  id: number;
-  name: string;
-  description: string;
-  html_url: string;
-  homepage: string;
-  stargazers_count: number;
-  forks_count: number;
-  language: string;
-  topics: string[];
-  created_at: string;
-  updated_at: string;
-}
+import { PageSEO } from "@/components/seo/PageSEO";
 
-const Projects = () => {
-  const [repos, setRepos] = useState<Repository[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState("featured");
+type Tab = "featured" | "starred" | "repos";
 
-  // Featured projects from resume data
-  const featuredProjects = resumeData.projects.map(project => ({
-    name: project.name.toLowerCase().replace(/\s+/g, '-'),
-    repoName: project.github?.split('/').pop() || '',
-    title: project.name,
-    description: project.description,
-    techStack: project.technologies,
-    liveUrl: project.liveDemo || '',
-    githubUrl: project.github || '',
-    status: project.status,
-    features: [],
-    credentials: project.credentials
-  }));
+const tabs: { id: Tab; label: string; icon: any }[] = [
+  { id: "featured", label: "Featured", icon: Star },
+  { id: "starred", label: "Starred", icon: Github },
+  { id: "repos", label: "My Repos", icon: RefreshCw },
+];
 
-  useEffect(() => {
-    fetchRepositories();
-  }, []);
+export default function Projects() {
+  const [activeTab, setActiveTab] = useState<Tab>("featured");
+  const [langFilter, setLangFilter] = useState<string>("All");
+  const { starred, ownRepos, loading, error } = useGitHubStarred();
 
-  const fetchRepositories = async (): Promise<void> => {
-  try {
-    setLoading(true);
+  // Collect unique languages
+  const languages = useMemo(() => {
+    const source = activeTab === "starred" ? starred : ownRepos;
+    const langs = ["All", ...new Set(source.map((r) => r.language).filter(Boolean) as string[])];
+    return langs;
+  }, [activeTab, starred, ownRepos]);
 
-    const response = await fetch(
-      "https://api.github.com/users/Prakhar4749/repos?sort=updated&per_page=20",
-      {
-        headers: {
-          Accept: "application/vnd.github+json",
-          "User-Agent": "prakhar-portfolio", // any string is fine
-        },
-      }
-    );
-
-    if (!response.ok) {
-      console.error("GitHub API error:", response.status, response.statusText);
-      return;
-    }
-
-    const data = (await response.json()) as Repository[];
-
-    // Optional: sort again just to be sure
-    const sorted = [...data].sort(
-      (a, b) =>
-        new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
-    );
-
-    setRepos(sorted);
-  } catch (error) {
-    console.error("Error fetching repositories:", error);
-  } finally {
-    setLoading(false);
-  }
-};
-
-
-  const getProjectDetails = (repo: Repository) => {
-    const featured = featuredProjects.find(p => 
-      p.repoName.toLowerCase() === repo.name.toLowerCase() ||
-      repo.name.toLowerCase().includes('payroll') ||
-      repo.name.toLowerCase().includes('cohort')
-    );
-    
-    return featured || {
-      name: repo.name,
-      title: repo.name.replace(/[-_]/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
-      description: repo.description || "No description available",
-      techStack: repo.topics?.length > 0 ? repo.topics : [repo.language].filter(Boolean),
-      liveUrl: repo.homepage,
-      githubUrl: repo.html_url,
-      status: '',
-      features: [],
-      credentials: ''
-    };
-  };
-
-  const isFeaturedRepo = (repo: Repository) => {
-    return featuredProjects.some(p => 
-      p.repoName.toLowerCase() === repo.name.toLowerCase() ||
-      repo.name.toLowerCase().includes('payroll') ||
-      repo.name.toLowerCase().includes('cohort')
-    );
-  };
-
-  const filteredRepos = repos.filter(repo => {
-    if (filter === "all") return true;
-    if (filter === "featured") return isFeaturedRepo(repo);
-    return repo.language?.toLowerCase() === filter.toLowerCase();
-  });
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading projects...</p>
-        </div>
-      </div>
-    );
-  }
+  // Filtered repos
+  const filteredRepos = useMemo(() => {
+    const source = activeTab === "starred" ? starred : ownRepos;
+    if (langFilter === "All") return source;
+    return source.filter((r) => r.language === langFilter);
+  }, [activeTab, starred, ownRepos, langFilter]);
 
   return (
-    <div className="min-h-screen py-20">
-      <div className="container mx-auto px-4">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
-        >
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">My Projects</h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
-            Here are some of my featured projects showcasing my expertise in Java, Spring Boot, Microservices, and React development.
-          </p>
+    <>
+      <PageSEO 
+        title="Projects" 
+        description="Explore Prakhar's featured projects, starred GitHub repos and open source work." 
+        path="/projects" 
+      />
+      <div className="min-h-screen pt-28 pb-20 px-6">
+      <div className="max-w-7xl mx-auto">
 
-          {/* Filter buttons */}
-          <div className="flex flex-wrap justify-center gap-4 mb-12">
-            {["all", "featured", "Java", "JavaScript", "TypeScript"].map((filterOption) => (
-              <Button
-                key={filterOption}
-                variant={filter === filterOption ? "default" : "outline"}
-                onClick={() => setFilter(filterOption)}
-                className="transition-all duration-300"
+        <SectionHeader
+          label="// portfolio"
+          title="My"
+          highlight="Projects"
+          description="Featured work, GitHub starred repositories, and open source contributions."
+        />
+
+        {/* Tab Switcher */}
+        <div className="flex justify-center mb-10">
+          <GlassCard className="p-1.5 flex gap-1" hover={false}>
+            {tabs.map(({ id, label, icon: Icon }) => (
+              <button
+                key={id}
+                onClick={() => { setActiveTab(id); setLangFilter("All"); }}
+                className={`relative flex items-center gap-2 px-5 py-2.5 rounded-lg font-mono text-sm font-medium transition-all duration-200 ${
+                  activeTab === id
+                    ? "dark:text-cyan-400 text-cyan-600"
+                    : "dark:text-white/50 text-slate-500 dark:hover:text-white/80 hover:text-slate-800"
+                }`}
               >
-                {filterOption.charAt(0).toUpperCase() + filterOption.slice(1)}
-              </Button>
+                {activeTab === id && (
+                  <motion.div
+                    layoutId="tab-bg"
+                    className="absolute inset-0 rounded-lg dark:bg-cyan-500/15 bg-cyan-500/15 dark:border-cyan-500/25 border-cyan-400/30 border"
+                    transition={{ type: "spring", duration: 0.4 }}
+                  />
+                )}
+                <Icon className="w-3.5 h-3.5 relative z-10" />
+                <span className="relative z-10">{label}</span>
+              </button>
             ))}
-          </div>
-        </motion.div>
+          </GlassCard>
+        </div>
 
-        {/* Featured Projects from Resume */}
-        {filter === "featured" && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-            {resumeData.projects.map((project, index) => (
-              <motion.div
-                key={project.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                whileHover={{ scale: 1.02 }}
-              >
-                <Card className="h-full ring-2 ring-primary relative overflow-hidden">
-                  <div className="absolute top-4 right-4 flex gap-2">
-                    <Badge variant="default" className="text-xs">
-                      Featured
-                    </Badge>
-                    {project.status && (
-                      <Badge variant="secondary" className="text-xs">
-                        {project.status}
-                      </Badge>
-                    )}
-                  </div>
-                  
-                  <CardHeader className="pt-12">
-                    <CardTitle className="text-xl mb-2">{project.name}</CardTitle>
-                    <CardDescription className="text-sm leading-relaxed">
-                      {project.description}
-                    </CardDescription>
-                  </CardHeader>
-
-                  <CardContent className="space-y-4">
-                    {/* Tech Stack */}
-                    <div className="flex flex-wrap gap-2">
-                      {project.technologies.map((tech, techIndex) => (
-                        <Badge key={techIndex} variant="secondary" className="text-sm">
-                          {tech}
-                        </Badge>
-                      ))}
-                    </div>
-
-                    {/* Credentials if available */}
-                    {project.credentials && (
-                      <div className="p-3 bg-muted rounded-lg">
-                        <p className="text-xs text-muted-foreground">
-                          <strong>Demo Credentials:</strong> {project.credentials}
-                        </p>
-                      </div>
-                    )}
-
-                    {/* Action buttons */}
-                    <div className="flex flex-wrap gap-2 pt-4">
-                      {project.github && (
-                        <Button
-                          asChild
-                          size="sm"
-                          variant="outline"
-                        >
-                          <a href={project.github} target="_blank" rel="noopener noreferrer">
-                            <Github className="h-4 w-4 mr-2" />
-                            Code
-                          </a>
-                        </Button>
-                      )}
-                      {project.liveDemo && (
-                        <Button
-                          asChild
-                          size="sm"
-                        >
-                          <a href={project.liveDemo} target="_blank" rel="noopener noreferrer">
-                            <ExternalLink className="h-4 w-4 mr-2" />
-                            Live Demo
-                          </a>
-                        </Button>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        )}
-
-        {/* GitHub Repositories */}
-        {filter !== "featured" && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredRepos.map((repo, index) => {
-              const projectDetails = getProjectDetails(repo);
-              const isFeatured = isFeaturedRepo(repo);
-              
-              return (
-                <motion.div
-                  key={repo.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <Card className={`h-full relative overflow-hidden ${isFeatured ? 'ring-2 ring-primary' : ''}`}>
-                    {isFeatured && (
-                      <div className="absolute top-4 right-4 bg-primary text-primary-foreground px-3 py-1 rounded-full text-xs font-medium">
-                        Featured
-                      </div>
-                    )}
-                    
-                    <CardHeader>
-                      <CardTitle className="text-lg mb-2">{projectDetails.title}</CardTitle>
-                      <CardDescription className="text-sm line-clamp-3">
-                        {projectDetails.description}
-                      </CardDescription>
-                    </CardHeader>
-
-                    <CardContent className="space-y-4">
-                      {/* Tech Stack */}
-                      <div className="flex flex-wrap gap-2">
-                        {projectDetails.techStack.slice(0, 4).map((tech, techIndex) => (
-                          <Badge key={techIndex} variant="secondary" className="text-sm">
-                            {tech}
-                          </Badge>
-                        ))}
-                        {projectDetails.techStack.length > 4 && (
-                          <Badge variant="secondary" className="text-sm">
-                            +{projectDetails.techStack.length - 4}
-                          </Badge>
-                        )}
-                      </div>
-
-                      {/* Stats */}
-                      <div className="flex items-center space-x-4 text-muted-foreground text-sm">
-                        <div className="flex items-center space-x-1">
-                          <Star className="h-4 w-4" />
-                          <span>{repo.stargazers_count}</span>
+        {/* Featured Projects Tab */}
+        <AnimatePresence mode="wait">
+          {activeTab === "featured" && (
+            <motion.div
+              key="featured"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                {featuredProjects.map((project, i) => (
+                  <motion.div
+                    key={project.title}
+                    initial={{ opacity: 0, y: 24 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.08 }}
+                  >
+                    <GlassCard glow="violet" className="p-5 h-full flex flex-col gap-4 group">
+                      {/* Project header */}
+                      <div>
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="font-mono text-[10px] tracking-widest dark:text-violet-400 text-violet-600 uppercase">
+                            Featured Project
+                          </span>
                         </div>
-                        <div className="flex items-center space-x-1">
-                          <GitFork className="h-4 w-4" />
-                          <span>{repo.forks_count}</span>
-                        </div>
-                        {repo.language && (
-                          <div className="flex items-center space-x-1">
-                            <div className="w-3 h-3 bg-primary rounded-full"></div>
-                            <span>{repo.language}</span>
-                          </div>
-                        )}
+                        <h3 className="font-bold text-base dark:text-white text-slate-900 group-hover:dark:text-violet-400 group-hover:text-violet-600 transition-colors">
+                          {project.title}
+                        </h3>
                       </div>
 
-                      {/* Action buttons */}
-                      <div className="flex space-x-2 pt-4">
-                        <Button
-                          asChild
-                          size="sm"
-                          variant="outline"
-                          className="flex-1"
-                        >
-                          <a href={repo.html_url} target="_blank" rel="noopener noreferrer">
-                            <Github className="h-4 w-4 mr-2" />
-                            Code
-                          </a>
-                        </Button>
-                        {projectDetails.liveUrl && (
-                          <Button
-                            asChild
-                            size="sm"
-                            className="flex-1"
+                      <p className="text-sm dark:text-white/50 text-slate-600 leading-relaxed flex-1">
+                        {project.description}
+                      </p>
+
+                      {/* Tech stack */}
+                      {project.technologies && (
+                        <div className="flex flex-wrap gap-1.5">
+                          {project.technologies.slice(0, 5).map((tech: string) => (
+                            <span
+                              key={tech}
+                              className="px-2 py-0.5 rounded-full font-mono text-[10px]
+                                dark:bg-white/5 bg-black/5 dark:border-white/10 border-black/10 border
+                                dark:text-white/60 text-slate-600"
+                            >
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Links */}
+                      <div className="flex gap-2 pt-2 border-t dark:border-white/[0.06] border-black/[0.06]">
+                        {!!project.github?.trim() && (
+                          <a
+                            href={project.github}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1.5 font-mono text-xs
+                              dark:text-white/50 text-slate-500 dark:hover:text-white hover:text-slate-900 transition-colors"
                           >
-                            <a href={projectDetails.liveUrl} target="_blank" rel="noopener noreferrer">
-                              <ExternalLink className="h-4 w-4 mr-2" />
-                              Live
-                            </a>
-                          </Button>
+                            <Github className="w-3.5 h-3.5" />
+                            Code
+                          </a>
+                        )}
+                        {!!project.link?.trim() && (
+                          <a
+                            href={project.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1.5 font-mono text-xs
+                              dark:text-cyan-400/70 text-cyan-600/80 dark:hover:text-cyan-400 hover:text-cyan-600 transition-colors"
+                          >
+                            <ExternalLink className="w-3.5 h-3.5" />
+                            Live
+                          </a>
                         )}
                       </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              );
-            })}
-          </div>
-        )}
+                    </GlassCard>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          )}
 
-        {filteredRepos.length === 0 && filter !== "featured" && (
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="text-center py-16"
-          >
-            <p className="text-muted-foreground text-lg">No projects found for the selected filter.</p>
-          </motion.div>
-        )}
+          {/* Starred / Repos Tabs */}
+          {(activeTab === "starred" || activeTab === "repos") && (
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.3 }}
+              className="space-y-6"
+            >
+              {/* Language filter pills */}
+              {!loading && !error && (
+                <div className="flex flex-wrap gap-2 items-center">
+                  <Filter className="w-3.5 h-3.5 dark:text-white/30 text-slate-400" />
+                  {languages.map((lang) => (
+                    <button
+                      key={lang}
+                      onClick={() => setLangFilter(lang)}
+                      className={`px-3 py-1 rounded-full font-mono text-xs border transition-all duration-200 ${
+                        langFilter === lang
+                          ? "dark:bg-cyan-500/20 bg-cyan-500/20 dark:border-cyan-500/40 border-cyan-500/40 dark:text-cyan-400 text-cyan-600"
+                          : "dark:bg-white/5 bg-black/5 dark:border-white/10 border-black/10 dark:text-white/50 text-slate-500 dark:hover:border-white/20 hover:border-black/20"
+                      }`}
+                    >
+                      {lang}
+                    </button>
+                  ))}
+                </div>
+              )}
 
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="text-center mt-16"
-        >
-          <Button asChild size="lg" className="px-8 py-3 rounded-full">
-            <a href={`https://github.com/${resumeData.personalInfo.github}`} target="_blank" rel="noopener noreferrer">
-              <Github className="h-5 w-5 mr-2" />
-              View All on GitHub
-            </a>
-          </Button>
-        </motion.div>
+              {/* Error state */}
+              {error && (
+                <GlassCard className="p-8 flex flex-col items-center gap-3 text-center" hover={false}>
+                  <AlertCircle className="w-8 h-8 text-red-400" />
+                  <p className="font-mono text-sm dark:text-white/60 text-slate-600">{error}</p>
+                  <p className="text-xs dark:text-white/30 text-slate-400 font-mono">GitHub API rate limit may apply</p>
+                </GlassCard>
+              )}
+
+              {/* Loading skeletons */}
+              {loading && !error && (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {Array.from({ length: 9 }).map((_, i) => (
+                    <RepoSkeleton key={i} />
+                  ))}
+                </div>
+              )}
+
+              {/* Repos grid */}
+              {!loading && !error && (
+                <>
+                  <p className="font-mono text-xs dark:text-white/30 text-slate-400">
+                    Showing {filteredRepos.length} {activeTab === "starred" ? "starred repos" : "repositories"}
+                    {langFilter !== "All" && ` · ${langFilter}`}
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                    {filteredRepos.map((repo, i) => (
+                      <RepoCard
+                        key={repo.id}
+                        repo={repo}
+                        index={i}
+                        variant={activeTab === "starred" ? "starred" : "own"}
+                      />
+                    ))}
+                  </div>
+
+                  {/* GitHub CTA */}
+                  <div className="flex justify-center pt-8">
+                    <a
+                      href={`https://github.com/Prakhar4749`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-mono text-sm
+                        dark:bg-white/5 bg-black/5 dark:border-white/10 border-black/10 border
+                        dark:text-white/60 text-slate-600 dark:hover:text-white hover:text-slate-900
+                        dark:hover:border-white/20 hover:border-black/20 transition-all duration-300"
+                    >
+                      <Github className="w-4 h-4" />
+                      View full GitHub profile
+                    </a>
+                  </div>
+                </>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
+    </>
   );
-};
-
-export default Projects;
+}

@@ -1,303 +1,366 @@
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { resumeData } from "@/data/resume";
-import { Download, Mail, Phone, Github, Linkedin, MapPin, Calendar, Building, GraduationCap, Award, Code, Globe, Trophy } from "lucide-react";
+import {
+  Download, ExternalLink, Briefcase, GraduationCap,
+  Code2, Award, Calendar, ChevronRight
+} from "lucide-react";
+import { SectionHeader } from "@/components/ui/section-header";
+import { GlassCard } from "@/components/ui/glass-card";
+import { NeonText } from "@/components/ui/neon-text";
+import { PageSEO } from "@/components/seo/PageSEO";
+import {
+  personalInfo, education, experience,
+  skills, projects, achievements
+} from "@/data/resume";
 
-const Resume = () => {
-  const handleDownloadResume = () => {
-    const link = document.createElement('a');
-    link.href = '/prakhar_resume.pdf';
-    link.download = 'Prakhar_Sakhare_Resume.pdf';
-    document.body.appendChild(link);
+const fadeUp = {
+  hidden: { opacity: 0, y: 20 },
+  show: (i: number) => ({
+    opacity: 1, y: 0,
+    transition: { delay: i * 0.08, duration: 0.45 },
+  }),
+};
+
+function ResumeSection({
+  icon: Icon,
+  title,
+  accent = "cyan",
+  children,
+}: {
+  icon: any;
+  title: string;
+  accent?: "cyan" | "violet";
+  children: React.ReactNode;
+}) {
+  return (
+    <section className="space-y-5">
+      <div className="flex items-center gap-3">
+        <div className={`w-9 h-9 rounded-xl flex items-center justify-center
+          ${accent === "cyan"
+            ? "dark:bg-cyan-500/10 bg-cyan-500/15 dark:border-cyan-500/20 border-cyan-400/30"
+            : "dark:bg-violet-500/10 bg-violet-500/15 dark:border-violet-500/20 border-violet-400/30"
+          } border`}>
+          <Icon className={`w-4 h-4 ${accent === "cyan" ? "dark:text-cyan-400 text-cyan-600" : "dark:text-violet-400 text-violet-600"}`} />
+        </div>
+        <h2 className="text-xl font-bold dark:text-white text-slate-900">{title}</h2>
+        <div className="flex-1 h-px dark:bg-white/[0.06] bg-black/[0.06]" />
+      </div>
+      {children}
+    </section>
+  );
+}
+
+export default function Resume() {
+  const handleDownload = () => {
+    const link = document.createElement("a");
+    link.href = "/prakhar_resume.pdf";
+    link.download = "Prakhar_Resume.pdf";
     link.click();
-    document.body.removeChild(link);
   };
 
+  // Normalize skills for display
+  const skillCategories = Array.isArray(skills)
+    ? (typeof skills[0] === "string"
+        ? [{ category: "Skills", items: skills }]
+        : skills)
+    : [];
+
   return (
-    <div className="min-h-screen py-20">
-      <div className="container mx-auto px-4">
-        {/* Header */}
+    <div className="min-h-screen pt-28 pb-20 px-6">
+      <PageSEO title="Resume" description="Prakhar's professional resume — experience, education, and technical expertise." path="/resume" />
+      <div className="max-w-5xl mx-auto space-y-16">
+
+        <SectionHeader
+          label="// curriculum vitae"
+          title="My"
+          highlight="Resume"
+          description="A summary of my education, experience, and technical expertise."
+        />
+
+        {/* Action buttons */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-8"
+          transition={{ duration: 0.5 }}
+          className="flex flex-wrap justify-center gap-4"
         >
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Resume</h1>
-          <p className="text-xl text-muted-foreground mb-6">
-            Comprehensive overview of my professional experience and qualifications
-          </p>
-          <Button onClick={handleDownloadResume} size="lg" className="mb-8">
-            <Download className="w-5 h-5 mr-2" />
-            Download PDF Resume
-          </Button>
+          <motion.button
+            onClick={handleDownload}
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            className="flex items-center gap-2 px-6 py-3 rounded-xl font-mono text-sm font-medium
+              dark:bg-cyan-500/15 bg-cyan-500/20 dark:border-cyan-500/30 border-cyan-500/40 border
+              dark:text-cyan-400 text-cyan-700 hover:shadow-glow-cyan transition-all duration-300"
+          >
+            <Download className="w-4 h-4" />
+            Download PDF
+          </motion.button>
+
+          <motion.a
+            href="/prakhar_resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            className="flex items-center gap-2 px-6 py-3 rounded-xl font-mono text-sm font-medium
+              dark:bg-white/5 bg-black/5 dark:border-white/10 border-black/10 border
+              dark:text-white/70 text-slate-700 dark:hover:bg-white/10 hover:bg-black/8
+              dark:hover:border-white/20 hover:border-black/20 transition-all duration-300"
+          >
+            <ExternalLink className="w-4 h-4" />
+            Open in Browser
+          </motion.a>
         </motion.div>
 
-        {/* Resume Content */}
+        {/* Header card — personal info */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="max-w-4xl mx-auto"
+          transition={{ duration: 0.5, delay: 0.1 }}
         >
-          <Card className="shadow-lg">
-            <CardContent className="p-8">
-              {/* Header Section */}
-              <div className="text-center mb-8">
-                <h1 className="text-4xl font-bold mb-2">{resumeData.personalInfo.name}</h1>
-                <p className="text-xl text-muted-foreground mb-4">{resumeData.hero.headline}</p>
-                
-                {/* Contact Info */}
-                <div className="flex flex-wrap justify-center gap-4 text-sm text-muted-foreground">
-                  <div className="flex items-center gap-1">
-                    <Mail className="w-4 h-4" />
-                    <span>{resumeData.personalInfo.email}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Phone className="w-4 h-4" />
-                    <span>{resumeData.personalInfo.phone}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Globe className="w-4 h-4" />
-                    <span>{resumeData.personalInfo.website}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Github className="w-4 h-4" />
-                    <span>{resumeData.personalInfo.github}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Linkedin className="w-4 h-4" />
-                    <span>{resumeData.personalInfo.linkedin}</span>
-                  </div>
-                </div>
-              </div>
-
-              <Separator className="my-8" />
-
-              {/* Summary */}
-              <motion.section
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="mb-8"
-              >
-                <h2 className="text-2xl font-bold mb-4">Summary</h2>
-                <p className="text-muted-foreground leading-relaxed pl-4">
-                  {resumeData.hero.intro}
+          <GlassCard glow="cyan" className="p-8">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+              <div>
+                <h1 className="text-3xl font-bold dark:text-white text-slate-900">
+                  {personalInfo.name}
+                </h1>
+                <p className="dark:text-cyan-400 text-cyan-600 font-mono text-sm mt-1">
+                  Full Stack Developer · CS Student
                 </p>
-              </motion.section>
-
-              <Separator className="my-8" />
-
-              {/* Education */}
-              <motion.section
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="mb-8"
-              >
-                <div className="flex items-center gap-2 mb-4">
-                  <GraduationCap className="w-5 h-5 text-primary" />
-                  <h2 className="text-2xl font-bold">Education</h2>
-                </div>
-                <div className="pl-7">
-                  <h3 className="text-lg font-semibold">{resumeData.education.degree}</h3>
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Building className="w-4 h-4" />
-                    <span>{resumeData.education.institution}</span>
+                <p className="dark:text-white/50 text-slate-600 text-sm mt-3 max-w-lg leading-relaxed">
+                  {personalInfo.bio}
+                </p>
+              </div>
+              <div className="space-y-2 font-mono text-xs flex-shrink-0">
+                {personalInfo.email && (
+                  <div className="flex items-center gap-2 dark:text-white/50 text-slate-600">
+                    <span className="dark:text-cyan-400/60 text-cyan-600/70">email</span>
+                    <ChevronRight className="w-3 h-3 dark:text-white/20 text-slate-300" />
+                    {personalInfo.email}
                   </div>
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <MapPin className="w-4 h-4" />
-                    <span>{resumeData.education.location}</span>
+                )}
+                {personalInfo.location && (
+                  <div className="flex items-center gap-2 dark:text-white/50 text-slate-600">
+                    <span className="dark:text-cyan-400/60 text-cyan-600/70">location</span>
+                    <ChevronRight className="w-3 h-3 dark:text-white/20 text-slate-300" />
+                    {personalInfo.location}
                   </div>
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Calendar className="w-4 h-4" />
-                    <span>{resumeData.education.duration}</span>
+                )}
+                {personalInfo.github && (
+                  <div className="flex items-center gap-2 dark:text-white/50 text-slate-600">
+                    <span className="dark:text-cyan-400/60 text-cyan-600/70">github</span>
+                    <ChevronRight className="w-3 h-3 dark:text-white/20 text-slate-300" />
+                    Prakhar4749
                   </div>
-                </div>
-              </motion.section>
+                )}
+              </div>
+            </div>
+          </GlassCard>
+        </motion.div>
 
-              <Separator className="my-8" />
-
-              {/* Experience */}
-              <motion.section
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-                className="mb-8"
-              >
-                <div className="flex items-center gap-2 mb-6">
-                  <Building className="w-5 h-5 text-primary" />
-                  <h2 className="text-2xl font-bold">Experience</h2>
-                </div>
-                <div className="space-y-6">
-                  {resumeData.experience.map((exp, index) => (
-                    <motion.div
-                      key={exp.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.5, delay: index * 0.1 }}
-                      className="pl-7 border-l-2 border-muted relative"
-                    >
-                      <div className="absolute left-0 top-0 transform -translate-x-1/2 w-3 h-3 bg-primary rounded-full" />
-                      
-                      <div className="space-y-2">
-                        <div className="flex items-start justify-between">
-                          <div>
-                            <h3 className="text-lg font-semibold">{exp.position}</h3>
-                            <p className="text-muted-foreground font-medium">
-                              {exp.company}
-                            </p>
-                            <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                              <div className="flex items-center gap-1">
-                                <MapPin className="w-4 h-4" />
-                                <span>{exp.location}</span>
-                              </div>
-                              <div className="flex items-center gap-1">
-                                <Calendar className="w-4 h-4" />
-                                <span>{exp.duration}</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        
-                        <ul className="space-y-1 mt-3">
-                          {exp.description.map((desc, i) => (
-                            <li key={i} className="text-sm text-muted-foreground">
-                              • {desc}
-                            </li>
-                          ))}
-                        </ul>
+        {/* Experience */}
+        {experience && experience.length > 0 && (
+          <ResumeSection icon={Briefcase} title="Experience" accent="cyan">
+            <div className="space-y-4">
+              {experience.map((exp: any, i: number) => (
+                <motion.div key={i} custom={i} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}>
+                  <GlassCard className="p-6">
+                    <div className="flex flex-wrap items-start justify-between gap-3 mb-3">
+                      <div>
+                        <h3 className="font-semibold dark:text-white text-slate-900">
+                          {exp.role || exp.position || exp.title}
+                        </h3>
+                        <p className="dark:text-cyan-400 text-cyan-600 font-mono text-sm">
+                          {exp.company || exp.organization}
+                        </p>
                       </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.section>
+                      <span className="flex items-center gap-1.5 font-mono text-xs
+                        dark:text-white/40 text-slate-500 dark:bg-white/5 bg-black/5
+                        px-3 py-1.5 rounded-full border dark:border-white/10 border-black/10">
+                        <Calendar className="w-3 h-3" />
+                        {exp.duration || exp.period || exp.date}
+                      </span>
+                    </div>
+                    {exp.description && (
+                      <p className="text-sm dark:text-white/55 text-slate-600 leading-relaxed mb-3">
+                        {exp.description}
+                      </p>
+                    )}
+                    {exp.highlights && exp.highlights.length > 0 && (
+                      <ul className="space-y-1.5">
+                        {exp.highlights.map((h: string, j: number) => (
+                          <li key={j} className="flex items-start gap-2 text-sm dark:text-white/50 text-slate-600">
+                            <span className="dark:text-cyan-400 text-cyan-600 mt-0.5 flex-shrink-0">▸</span>
+                            {h}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </GlassCard>
+                </motion.div>
+              ))}
+            </div>
+          </ResumeSection>
+        )}
 
-              <Separator className="my-8" />
+        {/* Education */}
+        {education && education.length > 0 && (
+          <ResumeSection icon={GraduationCap} title="Education" accent="violet">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {education.map((edu: any, i: number) => (
+                <motion.div key={i} custom={i} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}>
+                  <GlassCard glow="violet" className="p-6">
+                    <h3 className="font-semibold dark:text-white text-slate-900 leading-snug">
+                      {edu.degree || edu.qualification}
+                    </h3>
+                    <p className="dark:text-violet-400 text-violet-600 font-mono text-sm mt-1">
+                      {edu.institution || edu.school || edu.college}
+                    </p>
+                    <div className="flex items-center gap-3 mt-3 font-mono text-xs dark:text-white/40 text-slate-500">
+                      <span className="flex items-center gap-1">
+                        <Calendar className="w-3 h-3" />
+                        {edu.duration || edu.period || edu.year}
+                      </span>
+                      {(edu.cgpa || edu.gpa || edu.percentage) && (
+                        <span className="dark:text-cyan-400/70 text-cyan-600/80">
+                          {edu.cgpa || edu.gpa || edu.percentage}
+                        </span>
+                      )}
+                    </div>
+                  </GlassCard>
+                </motion.div>
+              ))}
+            </div>
+          </ResumeSection>
+        )}
 
-              {/* Projects */}
-              <motion.section
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="mb-8"
-              >
-                <div className="flex items-center gap-2 mb-6">
-                  <Code className="w-5 h-5 text-primary" />
-                  <h2 className="text-2xl font-bold">Projects</h2>
-                </div>
-                <div className="space-y-6">
-                  {resumeData.projects.map((project, index) => (
-                    <motion.div
-                      key={project.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.5, delay: index * 0.1 }}
-                      className="pl-7"
-                    >
-                      <div className="flex items-center gap-2 mb-2">
-                        <h3 className="text-lg font-semibold">{project.name}</h3>
-                        {project.status && (
-                          <Badge variant="secondary" className="text-xs">
-                            {project.status}
-                          </Badge>
+        {/* Skills */}
+        {skillCategories.length > 0 && (
+          <ResumeSection icon={Code2} title="Technical Skills" accent="cyan">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {skillCategories.map((cat: any, i: number) => (
+                <motion.div key={i} custom={i} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}>
+                  <GlassCard className="p-5">
+                    <h4 className="font-mono text-xs tracking-widest dark:text-cyan-400/70 text-cyan-600/80 uppercase mb-4">
+                      {cat.category || "Skills"}
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      {(cat.items || cat.skills || cat).map((skill: any, j: number) => (
+                        <span
+                          key={j}
+                          className="px-2.5 py-1 rounded-lg font-mono text-xs
+                            dark:bg-white/[0.05] bg-black/[0.05] dark:border-white/[0.08] border-black/[0.08] border
+                            dark:text-white/65 text-slate-700"
+                        >
+                          {typeof skill === "string" ? skill : skill.name}
+                        </span>
+                      ))}
+                    </div>
+                  </GlassCard>
+                </motion.div>
+              ))}
+            </div>
+          </ResumeSection>
+        )}
+
+        {/* Projects */}
+        {projects && projects.length > 0 && (
+          <ResumeSection icon={Code2} title="Key Projects" accent="violet">
+            <div className="space-y-4">
+              {projects.map((proj: any, i: number) => (
+                <motion.div key={i} custom={i} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}>
+                  <GlassCard className="p-6 group">
+                    <div className="flex items-start justify-between gap-3 mb-2">
+                      <h3 className="font-semibold dark:text-white text-slate-900 group-hover:dark:text-violet-400 group-hover:text-violet-600 transition-colors">
+                        {proj.title}
+                      </h3>
+                      <div className="flex gap-2 flex-shrink-0">
+                        {!!proj.github?.trim() && (
+                          <a href={proj.github} target="_blank" rel="noopener noreferrer"
+                            className="font-mono text-xs dark:text-white/40 text-slate-400 dark:hover:text-cyan-400 hover:text-cyan-600 transition-colors flex items-center gap-1">
+                            <ExternalLink className="w-3 h-3" /> Code
+                          </a>
+                        )}
+                        {!!proj.link?.trim() && (
+                          <a href={proj.link} target="_blank" rel="noopener noreferrer"
+                            className="font-mono text-xs dark:text-cyan-400/60 text-cyan-600/70 dark:hover:text-cyan-400 hover:text-cyan-600 transition-colors flex items-center gap-1">
+                            <ExternalLink className="w-3 h-3" /> Live
+                          </a>
                         )}
                       </div>
-                      <p className="text-muted-foreground text-sm mb-3">{project.description}</p>
-                      
-                      <div className="flex flex-wrap gap-2 mb-2">
-                        {project.technologies.map((tech, techIndex) => (
-                          <Badge key={techIndex} variant="outline" className="text-xs">
+                    </div>
+                    <p className="text-sm dark:text-white/50 text-slate-600 leading-relaxed mb-3">
+                      {proj.description}
+                    </p>
+                    {proj.technologies && (
+                      <div className="flex flex-wrap gap-1.5">
+                        {proj.technologies.map((tech: string) => (
+                          <span key={tech} className="px-2 py-0.5 rounded-full font-mono text-[10px]
+                            dark:bg-violet-500/10 bg-violet-500/12 dark:border-violet-500/20 border-violet-400/25 border
+                            dark:text-violet-400 text-violet-600">
                             {tech}
-                          </Badge>
+                          </span>
                         ))}
                       </div>
-                      
-                      {project.credentials && (
-                        <p className="text-xs text-muted-foreground italic">
-                          Demo: {project.credentials}
-                        </p>
+                    )}
+                  </GlassCard>
+                </motion.div>
+              ))}
+            </div>
+          </ResumeSection>
+        )}
+
+        {/* Achievements */}
+        {achievements && achievements.length > 0 && (
+          <ResumeSection icon={Award} title="Achievements" accent="cyan">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {achievements.map((ach: any, i: number) => (
+                <motion.div key={i} custom={i} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}>
+                  <GlassCard className="p-5 flex items-start gap-3">
+                    <span className="text-xl flex-shrink-0">{ach.icon || "🏆"}</span>
+                    <div>
+                      <h4 className="font-semibold text-sm dark:text-white text-slate-900">{ach.title}</h4>
+                      {ach.description && (
+                        <p className="text-xs dark:text-white/45 text-slate-500 mt-1 leading-relaxed">{ach.description}</p>
                       )}
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.section>
+                      {!!ach.link?.trim() && (
+                        <a 
+                          href={ach.link} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 mt-2 font-mono text-[10px] dark:text-cyan-400/60 text-cyan-600/70 hover:dark:text-cyan-400 hover:text-cyan-600 transition-colors"
+                        >
+                          View Credential ↗
+                        </a>
+                      )}
+                    </div>
+                  </GlassCard>
+                </motion.div>
+              ))}
+            </div>
+          </ResumeSection>
+        )}
 
-              <Separator className="my-8" />
-
-              {/* Technical Skills */}
-              <motion.section
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-                className="mb-8"
-              >
-                <div className="flex items-center gap-2 mb-4">
-                  <Code className="w-5 h-5 text-primary" />
-                  <h2 className="text-2xl font-bold">Technical Skills</h2>
-                </div>
-                <div className="pl-7 space-y-4">
-                  <div>
-                    <h4 className="font-semibold mb-2">Primary Stack:</h4>
-                    <p className="text-muted-foreground text-sm">{resumeData.skills.primaryStack.join(", ")}</p>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-2">Secondary:</h4>
-                    <p className="text-muted-foreground text-sm">{resumeData.skills.secondary.join(", ")}</p>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-2">Languages:</h4>
-                    <p className="text-muted-foreground text-sm">{resumeData.skills.languages.join(", ")}</p>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-2">Tools:</h4>
-                    <p className="text-muted-foreground text-sm">{resumeData.skills.tools.join(", ")}</p>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-2">Core Concepts:</h4>
-                    <p className="text-muted-foreground text-sm">{resumeData.skills.coreConcepts.join(", ")}</p>
-                  </div>
-                </div>
-              </motion.section>
-
-              <Separator className="my-8" />
-
-              {/* Achievements */}
-              <motion.section
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-              >
-                <div className="flex items-center gap-2 mb-4">
-                  <Trophy className="w-5 h-5 text-yellow-500" />
-                  <h2 className="text-2xl font-bold">Achievements</h2>
-                </div>
-                <ul className="pl-7 space-y-2">
-                  {resumeData.achievements.map((achievement, index) => (
-                    <li key={index} className="text-muted-foreground">
-                      • {achievement}
-                    </li>
-                  ))}
-                </ul>
-              </motion.section>
-            </CardContent>
-          </Card>
+        {/* Bottom CTA */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="text-center pt-8 border-t dark:border-white/[0.05] border-black/[0.05]"
+        >
+          <p className="font-mono text-sm dark:text-white/30 text-slate-400 mb-4">
+            Interested in working together?
+          </p>
+          <a
+            href="/contact"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-mono text-sm
+              dark:bg-cyan-500/15 bg-cyan-500/20 dark:border-cyan-500/30 border-cyan-500/40 border
+              dark:text-cyan-400 text-cyan-700 hover:shadow-glow-cyan transition-all duration-300"
+          >
+            Get In Touch ↗
+          </a>
         </motion.div>
+
       </div>
     </div>
   );
-};
-
-export default Resume;
+}

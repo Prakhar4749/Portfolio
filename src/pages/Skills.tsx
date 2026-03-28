@@ -1,265 +1,168 @@
 import { motion } from "framer-motion";
-import { 
-  Card, 
-  CardContent, 
-  CardDescription, 
-  CardHeader, 
-  CardTitle 
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
+import { SectionHeader } from "@/components/ui/section-header";
+import { GlassCard } from "@/components/ui/glass-card";
 import { resumeData } from "@/data/resume";
-import { 
-  Code, 
-  Database, 
-  Wrench, 
-  Brain, 
-  Cloud, 
-  Server, 
-  Layers 
-} from "lucide-react";
+import { PageSEO } from "@/components/seo/PageSEO";
 
-// 1. Define Precise Skill Levels based on your profile analysis
-const getSkillLevel = (skillName) => {
-  const levels = {
-    // Primary Stack (Your Strongest Area)
-    "Java": 95,
-    "Spring Boot 3": 92,
-    "Microservices Architecture": 90,
-    "JDBC (Native SQL)": 90, // High because of your specific optimization work
-    "Spring Security (JWT)": 88,
-    "MySQL": 88,
-    "PostgreSQL": 85,
-    "Spring Cloud (Gateway, Eureka)": 85,
-    "Hibernate/JPA": 82, // Slightly lower as you prefer JDBC for performance
-    "Docker": 80,
+function normalizeSkills(raw: any): { category: string; items: { name: string; level: number }[] }[] {
+  if (!raw) return [];
+  
+  // If raw is already an array (new format from resume.ts)
+  if (Array.isArray(raw)) {
+    return raw.map((cat: any) => ({
+      category: cat.category || "Skills",
+      items: (Array.isArray(cat.items) ? cat.items : []).map((name: string) => ({
+        name,
+        level: name === "Java" || name === "Spring Boot 3" ? 95 : 85
+      }))
+    }));
+  }
 
-    // Secondary (Solid, but not your main focus)
-    "React.js": 82,
-    "Node.js": 75,
-    "MongoDB": 78,
-    "Redis": 80, // Used in internship for caching
-    "Firebase": 70,
+  // If raw is an object (old format handling)
+  return Object.entries(raw).map(([key, value]) => {
+    const items = Array.isArray(value) 
+      ? value 
+      : typeof value === 'string' 
+        ? value.split(',').map(s => s.trim()) 
+        : Object.values(value as any);
 
-    // Languages
-    "SQL": 90,
-    "JavaScript (ES6+)": 85,
-    "HTML5": 90,
-    "CSS3": 85,
-    "C++": 75, // Good for DSA, but maybe used less in dev
-    "Python": 70,
+    return {
+      category: key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()),
+      items: (items as string[]).map((name: string) => ({
+        name,
+        level: name === "Java" || name === "Spring Boot 3" ? 95 : 85
+      }))
+    };
+  });
+}
 
-    // Core Concepts
-    "DSA": 88, // Supported by CodeVita & LeetCode stats
-    "System Design (HLD/LLD)": 85,
-    "REST API Design": 92,
-    "OOPS": 95,
-    "Agile/Scrum": 85,
-
-    // Tools
-    "Git/GitHub": 90,
-    "Postman": 95,
-    "IntelliJ IDEA": 95,
-    "Linux": 80,
-    "Maven": 88,
-    "VS Code": 90
-  };
-
-  // Default fallback if a new skill is added without a defined level
-  return levels[skillName] || 75;
+const categoryColors: Record<string, { glow: "cyan" | "violet" | "none"; accent: string }> = {
+  "Primary Stack": { glow: "cyan", accent: "dark:bg-cyan-500/20 bg-cyan-500/20 dark:text-cyan-400 text-cyan-600" },
+  "Secondary": { glow: "violet", accent: "dark:bg-violet-500/20 bg-violet-500/20 dark:text-violet-400 text-violet-600" },
+  "Languages": { glow: "cyan", accent: "dark:bg-blue-500/20 bg-blue-500/20 dark:text-blue-400 text-blue-600" },
+  "Tools": { glow: "none", accent: "dark:bg-emerald-500/20 bg-emerald-500/20 dark:text-emerald-400 text-emerald-600" },
+  "Core Concepts": { glow: "none", accent: "dark:bg-amber-500/20 bg-amber-500/20 dark:text-amber-400 text-amber-600" },
+  default: { glow: "none", accent: "dark:bg-white/10 bg-black/10 dark:text-white/70 text-slate-700" },
 };
 
-const skillCategories = [
-  {
-    title: "Primary Stack",
-    icon: Server,
-    skills: resumeData.skills.primaryStack.map(skill => ({ 
-      name: skill, 
-      level: getSkillLevel(skill) 
-    })),
-    color: "text-blue-500"
-  },
-  {
-    title: "Secondary Technologies",
-    icon: Layers,
-    skills: resumeData.skills.secondary.map(skill => ({ 
-      name: skill, 
-      level: getSkillLevel(skill) 
-    })),
-    color: "text-green-500"
-  },
-  {
-    title: "Programming Languages",
-    icon: Code,
-    skills: resumeData.skills.languages.map(skill => ({ 
-      name: skill, 
-      level: getSkillLevel(skill) 
-    })),
-    color: "text-purple-500"
-  },
-  {
-    title: "Tools & Technologies",
-    icon: Wrench,
-    skills: resumeData.skills.tools.map(skill => ({ 
-      name: skill, 
-      level: getSkillLevel(skill) 
-    })),
-    color: "text-orange-500"
-  },
-  {
-    title: "Core Concepts",
-    icon: Brain,
-    skills: resumeData.skills.coreConcepts.map(skill => ({ 
-      name: skill, 
-      level: getSkillLevel(skill) 
-    })),
-    color: "text-pink-500"
-  }
-];
+function getColor(category: string) {
+  return categoryColors[category] ?? categoryColors.default;
+}
 
-const Skills = () => {
+function SkillBar({ name, level, index }: { name: string; level: number; index: number }) {
   return (
-    <div className="min-h-screen py-20 bg-background">
-      <div className="container mx-auto px-4">
-        {/* Header */}
+    <motion.div
+      initial={{ opacity: 0, x: -16 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: index * 0.05, duration: 0.4 }}
+      className="space-y-1.5"
+    >
+      <div className="flex items-center justify-between">
+        <span className="font-mono text-sm dark:text-white/80 text-slate-800">{name}</span>
+        <span className="font-mono text-xs dark:text-white/30 text-slate-400">{level}%</span>
+      </div>
+      <div className="h-1.5 rounded-full dark:bg-white/[0.06] bg-black/[0.06] overflow-hidden">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
-        >
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Skills & Expertise</h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            A quantitative breakdown of my technical proficiency, highlighting my specialization in high-performance backend systems.
-          </p>
-        </motion.div>
+          className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-violet-500"
+          initial={{ width: 0 }}
+          whileInView={{ width: `${level}%` }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: index * 0.05 + 0.2, ease: "easeOut" }}
+        />
+      </div>
+    </motion.div>
+  );
+}
 
-        {/* Technical Skills Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-          {skillCategories.map((category, index) => (
-            <motion.div
-              key={category.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-            >
-              <Card className="h-full border-muted/50 hover:border-primary/50 transition-colors duration-300">
-                <CardHeader>
-                  <div className="flex items-center gap-3">
-                    <category.icon className={`w-6 h-6 ${category.color}`} />
-                    <div>
-                      <CardTitle className="text-lg">{category.title}</CardTitle>
-                      <CardDescription>
-                        {category.skills.length} technologies
-                      </CardDescription>
-                    </div>
+export default function Skills() {
+  const normalized = normalizeSkills(resumeData.skills);
+
+  // Collect all skill names for the floating cloud
+  const allSkills = normalized.flatMap((cat) => cat.items.map((i) => i.name));
+
+  return (
+    <>
+      <PageSEO 
+        title="Skills" 
+        description="Prakhar's technical skills — React, TypeScript, Node.js, Java, and more." 
+        path="/skills" 
+      />
+      <div className="min-h-screen pt-28 pb-20 px-6">
+      <div className="max-w-6xl mx-auto space-y-16">
+
+        <SectionHeader
+          label="// expertise"
+          title="Technical"
+          highlight="Skills"
+          description="Technologies and tools I work with to bring ideas to life."
+        />
+
+        {/* Skill category cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {normalized.map((cat, ci) => {
+            const { glow, accent } = getColor(cat.category);
+            return (
+              <motion.div
+                key={cat.category}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: ci * 0.1, duration: 0.5 }}
+              >
+                <GlassCard glow={glow} className="p-6 h-full">
+                  <div className="flex items-center gap-3 mb-6">
+                    <span className={`px-3 py-1 rounded-full font-mono text-xs font-medium border dark:border-transparent ${accent}`}>
+                      {cat.category}
+                    </span>
+                    <span className="font-mono text-xs dark:text-white/25 text-slate-400">
+                      {cat.items.length} skills
+                    </span>
                   </div>
-                </CardHeader>
-                <CardContent>
                   <div className="space-y-4">
-                    {category.skills.map((skill, skillIndex) => (
-                      <motion.div
+                    {cat.items.map((skill, si) => (
+                      <SkillBar
                         key={skill.name}
-                        initial={{ opacity: 0, x: -20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5, delay: (index * 0.1) + (skillIndex * 0.05) }}
-                        className="space-y-2"
-                      >
-                        <div className="flex justify-between items-center">
-                          <span className="text-sm font-medium">{skill.name}</span>
-                          <span className="text-xs text-muted-foreground font-mono">{skill.level}%</span>
-                        </div>
-                        <Progress value={skill.level} className="h-2" />
-                      </motion.div>
+                        name={skill.name}
+                        level={skill.level}
+                        index={si}
+                      />
                     ))}
                   </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
+                </GlassCard>
+              </motion.div>
+            );
+          })}
         </div>
 
-        {/* Skills Summary / Tag Cloud */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-        >
-          <Card className="overflow-hidden border-muted/50">
-            <CardHeader className="text-center bg-muted/20 pb-8">
-              <CardTitle className="text-2xl mb-2">Full Technology Stack</CardTitle>
-              <CardDescription>
-                A comprehensive view of my development ecosystem
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="pt-8">
-              <div className="flex flex-wrap gap-2 justify-center max-w-4xl mx-auto">
-                {[
-                  ...resumeData.skills.primaryStack,
-                  ...resumeData.skills.secondary,
-                  ...resumeData.skills.languages,
-                  ...resumeData.skills.tools,
-                  ...resumeData.skills.coreConcepts
-                ].map((tech, index) => (
-                  <motion.div
-                    key={`${tech}-${index}`}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.3, delay: index * 0.01 }}
-                    whileHover={{ scale: 1.1 }}
-                  >
-                    <Badge variant="secondary" className="text-sm py-1.5 px-3 cursor-default hover:bg-primary hover:text-primary-foreground transition-colors">
-                      {tech}
-                    </Badge>
-                  </motion.div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
+        {/* Floating skill tag cloud */}
+        <section>
+          <h3 className="font-mono text-xs tracking-widest dark:text-white/30 text-slate-400 uppercase mb-6 text-center">
+            Full Stack at a Glance
+          </h3>
+          <div className="flex flex-wrap justify-center gap-2.5">
+            {allSkills.map((skill, i) => (
+              <motion.span
+                key={skill}
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.03, duration: 0.3 }}
+                whileHover={{ scale: 1.08, y: -2 }}
+                className="px-3 py-1.5 rounded-full font-mono text-xs cursor-default
+                  dark:bg-white/[0.04] bg-black/[0.04] dark:border-white/[0.07] border-black/[0.07] border
+                  dark:text-white/55 text-slate-600 dark:hover:border-cyan-500/30 hover:border-cyan-400/40
+                  dark:hover:text-cyan-400 hover:text-cyan-600 dark:hover:bg-cyan-500/8 hover:bg-cyan-500/10
+                  transition-all duration-200"
+              >
+                {skill}
+              </motion.span>
+            ))}
+          </div>
+        </section>
 
-        {/* Areas of Interest */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="mt-8"
-        >
-          <Card className="border-muted/50">
-            <CardHeader className="text-center">
-              <CardTitle className="text-2xl">Areas of Interest</CardTitle>
-              <CardDescription>
-                Domains I am actively researching and building in
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="flex flex-wrap gap-3 justify-center">
-                {resumeData.interests.map((interest, index) => (
-                  <motion.div
-                    key={interest}
-                    initial={{ opacity: 0, scale: 0 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.3, delay: index * 0.1 }}
-                    whileHover={{ scale: 1.05 }}
-                  >
-                    <Badge variant="outline" className="text-sm py-2 px-4 border-primary/20 bg-primary/5">
-                      {interest}
-                    </Badge>
-                  </motion.div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
       </div>
     </div>
+    </>
   );
-};
-
-export default Skills;
+}

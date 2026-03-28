@@ -1,108 +1,154 @@
-export const resumeData = {
-  personalInfo: {
-    name: "Prakhar Sakhare",
-    email: "prakharsakhare2226@gmail.com",
-    phone: "+91-6232625599",
-    website: "www.prakhar.life",
-    github: "Prakhar4749",
-    linkedin: "prakhar2712",
-    leetcode: "prakhar_2712"
-  },
-
-  hero: {
-    headline: "Java Full Stack Developer",
-    intro: "Java Full Stack Developer and Backend Engineer specializing in Java, Spring Boot, Microservices, and React. Experienced in designing scalable backend architectures, secure authentication flows, and production-ready deployments. Delivered applications including a payroll automation platform and a real-time B2B marketplace. Strong foundation in DSA, System Design, Docker, Redis, and SQL.",
-    tagline: "Building reliable, high-performance systems"
-  },
-
-  education: {
-    degree: "B.Tech in Information Technology",
-    institution: "University Institute of Technology, RGPV",
-    location: "Bhopal, M.P.",
-    duration: "Nov 2022 – June 2026 (Expected)"
-  },
-
-  experience: [
-    {
-      id: 1,
-      company: "Thinkfluence Systems Pvt. Ltd.",
-      position: "Full Stack Developer Intern",
-      location: "Remote",
-      duration: "May 2025 – July 2025",
-      current: false,
-      description: [
-        "Built a real-time B2B marketplace platform enabling instant messaging and seamless user interaction, improving deal cycle efficiency by 25%.",
-        "Designed and deployed a modular service that incorporated Redis caching, scheduled data processing, and asynchronous workflows, reducing query latency by 40%."
-      ]
-    }
-  ],
-
-  projects: [
-    {
-      id: 1,
-      name: "Retail Sales Management System",
-      status: "Completed",
-      description: "Developed a high-performance inventory dashboard using Spring Boot and React. Engineered a custom dynamic SQL query builder (JDBC) to handle 10 Lakh+ (1M+) records, achieving <200ms latency via server-side pagination and reducing query overhead by 40% compared to standard JPA.",
-      technologies: ["Spring Boot", "React", "JDBC", "SQL", "PostgreSQL", "Context API"],
-      github: "https://github.com/Prakhar4749/RetailSalesManagementSystem", // Update this link if different
-      liveDemo: "https://retail-manager.prakhar.life/", // Add link if available
-      featured: true
-    },
-    {
-      id: 2,
-      name: "Payroll Management System",
-      status: "Deployed",
-      description: "Developed and deployed a production-ready payroll automation platform using Spring Boot, React, and MySQL, reducing manual processing and improving reliability. Implemented secure JWT authentication with role-based access control (RBAC) and optimized data persistence using Hibernate/JPA.",
-      technologies: ["Java", "Spring Boot", "React", "MySQL", "JWT", "Hibernate/JPA"],
-      github: "https://github.com/Prakhar4749/payroll-system",
-      liveDemo: "https://payroll.project.prakhar.life/",
-      featured: true,
-      credentials: "Username: admin, Password: admin"
-    },
-    {
-      id: 3,
-      name: "University IT Dept. Portal",
-      status: "In Development",
-      description: "Architecting a scalable microservices system using Spring Boot and React with polyglot persistence (PostgreSQL + MongoDB) and API Gateway-style routing. Building modules including resume parsing, approval workflows, and Redis-accelerated public data.",
-      technologies: ["Spring Boot", "React", "Docker", "PostgreSQL", "MongoDB", "Redis", "Spring Security"],
-      github: "https://github.com/Prakhar4749/University-IT-Portal",
-      srs: "#",
-      featured: true
-    }
-  ],
-
-  skills: {
-    primaryStack: [
-      "Java",
-      "Spring Boot 3",
-      "Spring Cloud (Gateway, Eureka)",
-      "Spring Security (JWT)",
-      "Hibernate/JPA",
-      "JDBC (Native SQL)",
-      "Microservices Architecture",
-      "PostgreSQL",
-      "MySQL",
-      "Docker"
-    ],
-    secondary: ["React.js", "Node.js", "MongoDB", "Redis", "Firebase"],
-    languages: ["Java", "SQL", "JavaScript (ES6+)", "C++", "Python", "HTML5", "CSS3"],
-    tools: ["Git/GitHub", "Postman", "Maven", "IntelliJ IDEA", "Linux", "VS Code"],
-    coreConcepts: ["REST API Design", "System Design (HLD/LLD)", "OOPS", "DSA", "Agile/Scrum"]
-  },
-
-  achievements: [
-    "TCS CodeVita Season 13: Qualified Round 2 with a Global Rank of 5956",
-    "CodeAdept 8.0 (UIT-RGPV): Secured Top 20 Rank in the university-level coding competition",
-    "LeetCode Problem Solving: Solved 150+ DSA problems on LeetCode demonstrating consistency in problem solving"
-  ],
-
-  interests: [
-    "Backend Development",
-    "Microservices Architecture",
-    "System Design",
-    "Data Structures & Algorithms",
-    "Cloud Computing"
-  ]
+export const personalInfo = {
+  name: "Prakhar Sakhare",
+  email: "prakharsakhare2226@gmail.com",
+  phone: "+91-6232625599",
+  website: "https://www.prakhar.life",
+  github: "https://github.com/Prakhar4749",
+  location: "Bhopal, India",
+  linkedin: "https://www.linkedin.com/in/prakhar2712/",
+  leetcode: "https://leetcode.com/u/prakhar_2712/",
+  bio: "Results-oriented Java Full Stack Developer specializing in Microservices, Event-Driven Architecture, and AI-powered automation."
 };
 
-export type ResumeData = typeof resumeData;
+export const hero = {
+  headline: "Java Full Stack Developer",
+  intro: "Results-oriented Java Full Stack Developer specializing in Microservices, Event-Driven Architecture, and AI-powered automation. Experienced in building and self-hosting production-grade systems using Spring Boot, Kafka, and Docker on personal Virtual Machines.",
+  tagline: "Building reliable, high-performance systems",
+  taglines: [
+    "Java Full Stack Developer",
+    "Spring Boot Expert",
+    "Microservices Architect",
+    "Backend Specialist",
+    "Problem Solver",
+  ],
+};
+
+export const projects = [
+  {
+    title: "Coindesk: Crypto Trading Simulator",
+    description: "Architected a production-grade Microservices trading simulator leveraging Apache Kafka as an asynchronous message handler for non-critical tasks.",
+    technologies: ["Spring Boot", "Kafka", "AOP", "Allure"],
+    github: "https://github.com/Prakhar4749/Crypto-Trading-Simulator",
+    link: "https://coindesk.prakhar.life/",
+    highlights: [
+      "Ensured zero bottleneck on core trading workflows under high-concurrency loads using Kafka.",
+      "Implemented AOP for centralized, human-readable structured logging across all services.",
+      "Enforced quality with comprehensive test suites generating automated Allure Reports.",
+      "Self-hosted the entire stack on a personal Virtual Machine from scratch, eliminating cloud costs."
+    ]
+  },
+  {
+    title: "Jobby: End-to-End AI Job Application Automation Bot",
+    description: "Developed a personal AI automation bot integrated directly with Slack as a trigger interface, capable of parsing job descriptions from various URLs and images.",
+    technologies: ["Node.js", "Slack API", "AI/LLM"],
+    
+    highlights: [
+      "Eliminated manual job application overhead by parsing LinkedIn posts, career portals, and raw text.",
+      "Automated the pipeline to generate and dispatch personalized emails with resume attachments.",
+      "Self-deployed on a personal Virtual Machine to ensure 24/7 availability."
+    ]
+  },
+  {
+    title: "Retail Sales Management System",
+    description: "Engineered a high-performance inventory dashboard capable of processing 1M+ records with <200ms latency.",
+    technologies: ["Spring Boot", "React", "SQL", "PostgreSQL", "JDBC", "Context API"],
+    github: "https://github.com/Prakhar4749/RetailSalesManagementSystem",
+    link: "https://retail-manager.prakhar.life/",
+    highlights: [
+      "Optimized performance via custom SQL indexing and a dynamic query builder supporting 15+ filters.",
+      "Improved UI responsiveness by 30% by optimizing frontend state management with Context API."
+    ]
+  }
+];
+
+export const education = [
+  {
+    degree: "Bachelor of Technology in Information Technology",
+    institution: "University Institute of Technology, RGPV",
+    location: "Bhopal, M.P.",
+    duration: "2022 – 2026",
+    cgpa: "8.5 CGPA (Current)"
+  }
+];
+
+export const experience = [
+  {
+    company: "Thinkfluence Systems Pvt. Ltd. (BoostExpo)",
+    role: "Full Stack Developer Intern",
+    location: "Remote",
+    duration: "May 2025 – July 2025",
+    description: "Built an automated email notification module and optimized backend API performance.",
+    highlights: [
+      "Reduced manual communication efforts by 40% using Java Cron Jobs for automated notifications.",
+      "Cut average response latency from 500ms to 200ms on high-traffic endpoints via Redis Caching.",
+      "Improved system stability and reduced bug reports by 15% through legacy code refactoring."
+    ]
+  }
+];
+
+export const skills = [
+  {
+    category: "Languages",
+    items: ["Java", "JavaScript (ES6+)", "SQL", "C++"]
+  },
+  {
+    category: "Frameworks",
+    items: ["Spring Boot 3", "Spring Cloud", "Hibernate/JPA", "Node.js", "React.js"]
+  },
+  {
+    category: "Distributed Systems",
+    items: ["Apache Kafka", "Microservices", "REST APIs", "WebSockets (STOMP)"]
+  },
+  {
+    category: "Databases & Caching",
+    items: ["PostgreSQL", "MySQL", "MongoDB", "Redis"]
+  },
+  {
+    category: "DevOps & Tools",
+    items: ["Docker", "Git", "Linux (VM Self-Hosting)", "Postman", "Maven", "Allure Reports"]
+  }
+];
+
+export const achievements = [
+  {
+    title: "Claude Code in Action",
+    description: "Completed official certification covering AI-assisted development and production workflows.",
+    link: "https://drive.google.com/file/d/1ru_6rURA8ite4ASGzEqZrb7SwfQW-8v6/view?usp=sharing",
+    icon: "🏆"
+  },
+  {
+    title: "TCS CodeVita Season 13",
+    description: "Qualified Round 2 with a Global Rank of 5956 (Top 5% of participants).",
+    icon: "🏅"
+  },
+  {
+    title: "CodeAdept 8.0",
+    description: "Secured Top 20 University Rank for algorithmic problem-solving.",
+    icon: "🥇"
+  },
+  {
+    title: "300+ DSA Problems",
+    description: "Solved across coding platforms, demonstrating strong algorithmic proficiency.",
+    icon: "💻"
+  }
+];
+
+export const interests = [
+  "Backend Development",
+  "Microservices Architecture",
+  "System Design",
+  "Open Source",
+  "Cloud Computing",
+  "Tech Blogging"
+];
+
+export const resumeData = {
+  personalInfo,
+  hero,
+  projects,
+  education,
+  experience,
+  skills,
+  achievements,
+  interests
+};

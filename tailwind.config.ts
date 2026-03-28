@@ -18,6 +18,10 @@ export default {
 			}
 		},
 		extend: {
+			fontFamily: {
+				sans: ['Space Grotesk', 'system-ui', 'sans-serif'],
+				mono: ['JetBrains Mono', 'monospace'],
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
@@ -61,12 +65,29 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				cyber: {
+					cyan: '#00F5FF',
+					violet: '#8B5CF6',
+					dark: '#0A0B1A',
+					card: '#0E1020',
+					border: '#1A1D35',
 				}
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)'
+			},
+			boxShadow: {
+				'glow-cyan': '0 0 20px rgba(0, 245, 255, 0.3), 0 0 40px rgba(0, 245, 255, 0.1)',
+				'glow-violet': '0 0 20px rgba(139, 92, 246, 0.3), 0 0 40px rgba(139, 92, 246, 0.1)',
+				'glow-cyan-strong': '0 0 30px rgba(0, 245, 255, 0.5), 0 0 60px rgba(0, 245, 255, 0.2)',
+				'glass': '0 4px 24px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.06)',
+			},
+			backgroundImage: {
+				'gradient-cyber': 'linear-gradient(135deg, rgba(0,245,255,0.1) 0%, rgba(139,92,246,0.1) 100%)',
+				'gradient-card': 'linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%)',
 			},
 			keyframes: {
 				'accordion-down': {
@@ -114,6 +135,18 @@ export default {
 						opacity: '1',
 						transform: 'translateX(0)'
 					}
+				},
+				float: {
+					'0%, 100%': { transform: 'translateY(0px)' },
+					'50%': { transform: 'translateY(-12px)' },
+				},
+				glowPulse: {
+					'0%, 100%': { opacity: '0.4' },
+					'50%': { opacity: '1' },
+				},
+				gridFlow: {
+					'0%': { transform: 'translateY(0)' },
+					'100%': { transform: 'translateY(40px)' },
 				}
 			},
 			animation: {
@@ -121,11 +154,12 @@ export default {
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'fade-in': 'fade-in 0.5s ease-out',
 				'slide-in-left': 'slide-in-left 0.5s ease-out',
-				'slide-in-right': 'slide-in-right 0.5s ease-out'
+				'slide-in-right': 'slide-in-right 0.5s ease-out',
+				'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+				'float': 'float 6s ease-in-out infinite',
+				'glow-pulse': 'glowPulse 3s ease-in-out infinite',
+				'grid-flow': 'gridFlow 20s linear infinite',
 			},
-			fontFamily: {
-				'inter': ['Inter', 'system-ui', 'sans-serif'],
-			}
 		}
 	},
 	plugins: [require("tailwindcss-animate")],

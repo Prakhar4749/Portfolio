@@ -2,140 +2,128 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* ============================================
+   DARK THEME (default)
+   ============================================ */
+:root,
+.dark {
+  --background: 220 27% 6%;
+  --foreground: 210 40% 96%;
+  --card: 220 20% 10%;
+  --card-foreground: 210 40% 96%;
+  --popover: 220 20% 10%;
+  --popover-foreground: 210 40% 96%;
+  --primary: 187 100% 60%;
+  --primary-foreground: 220 27% 6%;
+  --secondary: 262 80% 65%;
+  --secondary-foreground: 210 40% 96%;
+  --muted: 220 20% 15%;
+  --muted-foreground: 215 20% 55%;
+  --accent: 262 80% 65%;
+  --accent-foreground: 210 40% 96%;
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 210 40% 96%;
+  --border: 220 20% 18%;
+  --input: 220 20% 14%;
+  --ring: 187 100% 60%;
+  --radius: 0.75rem;
 
-@layer base {
-  :root {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+  --glow-cyan: 0 0 20px rgba(0, 245, 255, 0.3), 0 0 40px rgba(0, 245, 255, 0.1);
+  --glow-violet: 0 0 20px rgba(139, 92, 246, 0.3), 0 0 40px rgba(139, 92, 246, 0.1);
+  --glow-cyan-strong: 0 0 30px rgba(0, 245, 255, 0.5), 0 0 60px rgba(0, 245, 255, 0.2);
+  --glass-bg: rgba(255, 255, 255, 0.04);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-hover: rgba(255, 255, 255, 0.07);
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+  --mesh-1: rgba(0, 245, 255, 0.06);
+  --mesh-2: rgba(139, 92, 246, 0.08);
+  --mesh-base: hsl(220 27% 6%);
+  --grid-color: rgba(0, 245, 255, 0.8);
+  --grid-opacity: 0.03;
+  --corner-glow-1: rgba(0, 245, 255, 0.05);
+  --corner-glow-2: rgba(139, 92, 246, 0.05);
+}
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+/* ============================================
+   LIGHT THEME
+   ============================================ */
+.light {
+  --background: 220 30% 97%;
+  --foreground: 220 30% 10%;
+  --card: 0 0% 100%;
+  --card-foreground: 220 30% 10%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 220 30% 10%;
+  --primary: 187 80% 38%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 262 60% 52%;
+  --secondary-foreground: 0 0% 100%;
+  --muted: 220 20% 92%;
+  --muted-foreground: 220 15% 45%;
+  --accent: 262 60% 52%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 220 20% 88%;
+  --input: 220 20% 94%;
+  --ring: 187 80% 38%;
 
-    --primary: 263.4 70% 50.4%;
-    --primary-foreground: 210 40% 98%;
+  --glow-cyan: 0 0 15px rgba(0, 180, 200, 0.2), 0 0 30px rgba(0, 180, 200, 0.08);
+  --glow-violet: 0 0 15px rgba(124, 58, 237, 0.2), 0 0 30px rgba(124, 58, 237, 0.08);
+  --glow-cyan-strong: 0 0 25px rgba(0, 180, 200, 0.35), 0 0 50px rgba(0, 180, 200, 0.15);
+  --glass-bg: rgba(255, 255, 255, 0.70);
+  --glass-border: rgba(0, 0, 0, 0.07);
+  --glass-hover: rgba(255, 255, 255, 0.85);
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 263.4 70% 50.4%;
-
-    --radius: 0.75rem;
-
-    --sidebar-background: 222.2 84% 4.9%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 263.4 70% 50.4%;
-    --sidebar-primary-foreground: 210 40% 98%;
-    --sidebar-accent: 217.2 32.6% 17.5%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 217.2 32.6% 17.5%;
-    --sidebar-ring: 263.4 70% 50.4%;
-  }
-
-  .light {
-    --background: 210 40% 98%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 210 40% 98%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 210 40% 98%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 220.9 39.3% 11%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222.2 84% 4.9%;
-
-    --muted: 210 40% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96%;
-    --accent-foreground: 222.2 84% 4.9%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --sidebar-background: 210 40% 98%;
-    --sidebar-foreground: 222.2 84% 4.9%;
-    --sidebar-primary: 220.9 39.3% 11%;
-    --sidebar-primary-foreground: 210 40% 98%;
-    --sidebar-accent: 210 40% 96%;
-    --sidebar-accent-foreground: 222.2 84% 4.9%;
-    --sidebar-border: 214.3 31.8% 91.4%;
-    --sidebar-ring: 222.2 84% 4.9%;
-  }
+  --mesh-1: rgba(0, 200, 230, 0.08);
+  --mesh-2: rgba(139, 92, 246, 0.06);
+  --mesh-base: hsl(220 30% 97%);
+  --grid-color: rgba(0, 180, 220, 0.9);
+  --grid-opacity: 0.05;
+  --corner-glow-1: rgba(0, 200, 230, 0.12);
+  --corner-glow-2: rgba(139, 92, 246, 0.10);
 }
 
 @layer base {
   * {
     @apply border-border;
+    scrollbar-width: thin;
+    scrollbar-color: hsl(187 100% 60% / 0.4) transparent;
+  }
+
+  *::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: hsl(187 100% 60% / 0.4);
+    border-radius: 2px;
   }
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(ellipse 80% 50% at 20% 10%, var(--mesh-1) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 80%, var(--mesh-2) 0%, transparent 60%),
+      var(--mesh-base);
+    pointer-events: none;
+    transition: background 0.4s ease;
+  }
+
+  code, kbd, pre, .mono {
+    font-family: 'JetBrains Mono', monospace;
   }
 
   html {
     scroll-behavior: smooth;
-  }
-}
-
-/* Enhanced animations */
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
-}
-
-@keyframes gradient {
-  0%, 100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-@keyframes glow {
-  0%, 100% {
-    box-shadow: 0 0 5px rgba(139, 92, 246, 0.5);
-  }
-  50% {
-    box-shadow: 0 0 20px rgba(139, 92, 246, 0.8), 0 0 30px rgba(139, 92, 246, 0.5);
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: -1000px 0;
-  }
-  100% {
-    background-position: 1000px 0;
   }
 }
